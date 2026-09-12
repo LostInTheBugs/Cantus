@@ -161,9 +161,15 @@ static int load_file(const wchar_t* path)
 
     clear_table();
 
-    wchar_t* save = NULL;
-    wchar_t* line = wcstok(wbuf, L"\r\n", &save);
-    while (line && g_nkeys < MAX_KEYS) {
+    /* découpage ligne par ligne : le wcstok à 3 arguments (style MSVC)
+     * n'existe plus dans le MinGW récent de la CI — découpage manuel sur
+     * L'\n' en retirant un éventuel L'\r' final (fichiers CRLF) */
+    wchar_t* line = wbuf;
+    while (line && *line && g_nkeys < MAX_KEYS) {
+        wchar_t* nl = wcschr(line, L'\n');
+        if (nl) *nl = 0;
+        size_t llen = wcslen(line);
+        if (llen && line[llen - 1] == L'\r') line[llen - 1] = 0;
         wchar_t* q = line;
         while (*q == L' ' || *q == L'\t') q++;
         if (*q && *q != L'#') {
@@ -196,7 +202,7 @@ static int load_file(const wchar_t* path)
                 g_nkeys++;
             }
         }
-        line = wcstok(NULL, L"\r\n", &save);
+        line = nl ? nl + 1 : NULL;
     }
     free(wbuf);
     return 0;
