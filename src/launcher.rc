@@ -1,0 +1,8 @@
+/* src/launcher.rc — ressources du lanceur Cantus.exe :
+ * icône de l'application (Explorer, barre des tâches) + VERSIONINFO
+ * (onglet Détails). Le client (CantusApp.exe) a son propre fichier
+ * src/cantus.rc (dialogues + icône + VERSIONINFO client). */
+#include <windows.h>
+#define IDI_CANTUS 1
+IDI_CANTUS ICON "cantus.ico"
+#include "version_launcher.rc"

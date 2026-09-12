@@ -17,8 +17,8 @@
 #define MP_VERSION "0.0.0"
 #endif
 
-#define UPDATE_URL L"https://api.github.com/repos/LostInTheBugs/MusicPlayer/releases/latest"
-#define DL_URL     L"https://github.com/LostInTheBugs/MusicPlayer/releases/latest"
+#define UPDATE_URL L"https://api.github.com/repos/LostInTheBugs/Cantus/releases/latest"
+#define DL_URL     L"https://github.com/LostInTheBugs/Cantus/releases/latest"
 
 static char          g_latest[32];
 static volatile LONG g_checking = 0;
@@ -80,12 +80,12 @@ static int cmp_ver(const char* cur, const char* lat)
 }
 
 /* ------------------------------------------------------------------ */
-/* Préférence « vérifier au démarrage » (fichier %APPDATA%\MusicPlayer) */
+/* Préférence « vérifier au démarrage » (fichier %APPDATA%\Cantus) */
 /* ------------------------------------------------------------------ */
 static void appdata_path(wchar_t* out, size_t cap, const wchar_t* file)
 {
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, out) == S_OK) {
-        wcscat_s(out, cap, L"\\MusicPlayer");
+        wcscat_s(out, cap, L"\\Cantus");
         CreateDirectoryW(out, NULL);
         wcscat_s(out, cap, file);
     } else {
@@ -243,9 +243,9 @@ int mp_update_download(const char* tag, const wchar_t* out_path)
 {
     wchar_t url[512];
     swprintf(url, 512,
-        L"https://github.com/LostInTheBugs/MusicPlayer/releases/download/"
-        L"%hs/MusicPlayer-%hs-win64.zip", tag, tag);
-    HINTERNET inet = InternetOpenW(L"MusicPlayer-Updater/1.0",
+        L"https://github.com/LostInTheBugs/Cantus/releases/download/"
+        L"%hs/Cantus-%hs-win64.zip", tag, tag);
+    HINTERNET inet = InternetOpenW(L"Cantus-Updater/1.0",
                                    INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (!inet) return -1;
     DWORD to = 60000;
@@ -347,7 +347,7 @@ static DWORD WINAPI upd_thread(LPVOID arg)
     int  state = 2;                    /* erreur par défaut */
     g_latest[0] = 0;
 
-    HINTERNET inet = InternetOpenW(L"MusicPlayer-Updater/1.0",
+    HINTERNET inet = InternetOpenW(L"Cantus-Updater/1.0",
                                    INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (inet) {
         DWORD to = 10000;
@@ -362,7 +362,7 @@ static DWORD WINAPI upd_thread(LPVOID arg)
              * peut ne pas apparaître en tête) */
             wcscpy(check_url,
                    L"https://api.github.com/repos/LostInTheBugs/"
-                   L"MusicPlayer/releases?per_page=10");
+                   L"Cantus/releases?per_page=10");
         } else {
             /* canal stable : la dernière release non-pre-release */
             wcscpy(check_url, UPDATE_URL);
@@ -483,24 +483,25 @@ int mp_update_apply_and_restart(void)
     if (!f) return -1;
     fwprintf(f,
         L"@echo off\r\n"
-        L"rem ===== MusicPlayer updater =====\r\n"
+        L"rem ===== Cantus updater =====\r\n"
         L"rem arrete le moteur : service Windows d'abord (un taskkill sans\r\n"
         L"rem elevation echoue sur un service LocalSystem), puis kill des\r\n"
         L"rem processus avec VERIFICATION (le tar ne doit jamais partir en\r\n"
         L"rem course avec un processus mourant qui verrouille ses fichiers)\r\n"
-        L"sc stop MusicPlayerCore >nul 2>&1\r\n"
-        L"taskkill /IM MusicPlayer.exe /F >nul 2>&1\r\n"
-        L"taskkill /IM MusicPlayerApp.exe /F >nul 2>&1\r\n"
-        L"taskkill /IM musicplayer-core.exe /F >nul 2>&1\r\n"
+        L"sc stop CantusCore >nul 2>&1\r\n"
+        L"sc stop MusicPlayerCore >nul 2>&1\r\n"   /* ancien nom (renommage 2026.09.100) */
+        L"taskkill /IM Cantus.exe /F >nul 2>&1\r\n"
+        L"taskkill /IM CantusApp.exe /F >nul 2>&1\r\n"
+        L"taskkill /IM cantus-core.exe /F >nul 2>&1\r\n"
         L"for /l %%%%i in (1,1,10) do (\r\n"
-        L"  tasklist /FI \"IMAGENAME eq MusicPlayerApp.exe\" 2>nul | find /i \"MusicPlayerApp.exe\" >nul || goto :apps_dead\r\n"
-        L"  taskkill /IM MusicPlayerApp.exe /F >nul 2>&1\r\n"
+        L"  tasklist /FI \"IMAGENAME eq CantusApp.exe\" 2>nul | find /i \"CantusApp.exe\" >nul || goto :apps_dead\r\n"
+        L"  taskkill /IM CantusApp.exe /F >nul 2>&1\r\n"
         L"  ping -n 2 127.0.0.1 >nul\r\n"
         L")\r\n"
         L":apps_dead\r\n"
         L"for /l %%%%i in (1,1,10) do (\r\n"
-        L"  tasklist /FI \"IMAGENAME eq musicplayer-core.exe\" 2>nul | find /i \"musicplayer-core.exe\" >nul || goto :core_dead\r\n"
-        L"  taskkill /IM musicplayer-core.exe /F >nul 2>&1\r\n"
+        L"  tasklist /FI \"IMAGENAME eq cantus-core.exe\" 2>nul | find /i \"cantus-core.exe\" >nul || goto :core_dead\r\n"
+        L"  taskkill /IM cantus-core.exe /F >nul 2>&1\r\n"
         L"  ping -n 2 127.0.0.1 >nul\r\n"
         L")\r\n"
         L"rem le moteur est encore vivant (service qui redemarre ?) : une\r\n"
@@ -516,12 +517,12 @@ int mp_update_apply_and_restart(void)
         L"  echo FAIL: tar errorlevel %errorlevel% > updater.log\r\n"
         L"  type updater.err >> updater.log\r\n"
         L") else (\r\n"
-        L"  if exist MusicPlayer.exe (\r\n"
+        L"  if exist Cantus.exe (\r\n"
         L"    setlocal enabledelayedexpansion\r\n"
         L"    set /p VER=<VERSION\r\n"
         L"    echo OK: !VER! > updater.log\r\n"
         L"  ) else (\r\n"
-        L"    echo FAIL: MusicPlayer.exe absent apres extraction >> updater.log\r\n"
+        L"    echo FAIL: Cantus.exe absent apres extraction >> updater.log\r\n"
         L"  )\r\n"
         L")\r\n"
         L"del update.zip >nul 2>&1\r\n"
@@ -531,9 +532,9 @@ int mp_update_apply_and_restart(void)
      * le client met à jour les plugins PUIS démarre l'UI (il ne sort
      * plus sans fenêtre — la relance doit TOUJOURS ramener l'appli) */
     if (mp_update_get_plugins())
-        fwprintf(f, L"start \"\" \"%%~dp0MusicPlayer.exe\" --update-plugins\r\n");
+        fwprintf(f, L"start \"\" \"%%~dp0Cantus.exe\" --update-plugins\r\n");
     else
-        fwprintf(f, L"start \"\" \"%%~dp0MusicPlayer.exe\"\r\n");
+        fwprintf(f, L"start \"\" \"%%~dp0Cantus.exe\"\r\n");
     fwprintf(f, L"del \"%%~f0\"\r\n");
     fclose(f);
 

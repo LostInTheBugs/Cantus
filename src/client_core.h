@@ -1,7 +1,7 @@
 #ifndef MP_CLIENT_CORE_H
 #define MP_CLIENT_CORE_H
 
-/* Pont client → moteur (musicplayer-core.exe, API REST 8080).
+/* Pont client → moteur (cantus-core.exe, API REST 8080).
  * Le client pilote le moteur par HTTP/JSON et lit son état par polling.
  * En mode défaut, cc_start() lance le moteur s'il ne tourne pas. */
 

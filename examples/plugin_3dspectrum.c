@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "3D Spectrum" (analyseur de spectre rotatif 3D)
+ * Plugin Cantus — "3D Spectrum" (analyseur de spectre rotatif 3D)
  * ====================================================================
  * Type : visuel. Style "Spectrum3D" (spectrum3d.sourceforge.net) :
  * fond bleu nuit très sombre, barres fines en cylindre rotatif, chaque

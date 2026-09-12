@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — moteur de langues
+ * Cantus — moteur de langues
  * Fichiers "lang/<code>.lang" : UTF-8, "cle=valeur", '#' commentaires,
  * séquence \n interprétée. L'anglais est embarqué (tableau g_en) et sert
  * de langue de secours.
@@ -117,7 +117,7 @@ static const struct { const char* key; const wchar_t* val; } g_en[] = {
     { "err_open",         L"Cannot open \"%s\".\nUnsupported format or corrupted file." },
     { "err_folder",       L"No playable audio files (MP3/MP4) found in \"%s\"." },
     { "about_title",      L"About" },
-    { "about_text",       L"MusicPlayer %hs (app)\n\nAudio player for MP3 / MP4 (Windows).\n"
+    { "about_text",       L"Cantus %hs (app)\n\nAudio player for MP3 / MP4 (Windows).\n"
                           L"Decoding : FFmpeg %hs\nAudio : miniaudio\nPlugins : %d loaded\n\n"
                           L"Shortcuts : Space = play/pause, S = stop,\n↑/↓ = volume, Ctrl+O = open" },
     { NULL, NULL }

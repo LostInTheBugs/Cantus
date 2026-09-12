@@ -1,6 +1,6 @@
 /* src/core/core_http.c — API publique du moteur (client/serveur).
  *
- * Le core (musicplayer-core.exe) expose son état et ses commandes via
+ * Le core (cantus-core.exe) expose son état et ses commandes via
  * cette API REST standard, documentée dans API.md :
  *
  *   GET  /api/state   état complet (JSON)

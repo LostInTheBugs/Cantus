@@ -25,7 +25,7 @@ jobs:
         run: |
           make 2>&1 | tee /tmp/build.log
           grep -E "error|warning" /tmp/build.log && exit 1 || true
-          test -f bin/MusicPlayer.exe
+          test -f bin/Cantus.exe
 
       - name: Build example plugins (zero warning)
         run: |
@@ -38,4 +38,4 @@ jobs:
           grep -q "SELFTEST PASS" /tmp/test.log
 
       - name: Package (zip)
-        run: make zip && test -f dist/MusicPlayer-$(grep -oP 'VERSION := \K.*' Makefile)-win64.zip
+        run: make zip && test -f dist/Cantus-$(grep -oP 'VERSION := \K.*' Makefile)-win64.zip

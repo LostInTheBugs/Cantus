@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /*
- * Moteur de lecture MusicPlayer.
+ * Moteur de lecture Cantus.
  * Décodage MP3/MP4 via FFmpeg (libavformat/libavcodec/libswresample),
  * sortie audio via miniaudio (WASAPI/DirectSound/WinMM).
  */

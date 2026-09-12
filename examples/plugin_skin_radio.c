@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin radio vintage.
+ * Cantus — skin radio vintage.
  * Bois & doré : une vieille radio à lampes.
  */
 #include <windows.h>

@@ -1,4 +1,4 @@
-# MusicPlayer — English language file (default)
+# Cantus — English language file (default)
 # ===============================================
 # Format : key=value   (one per line)
 #   - '#' or ';' at the start of a line = comment
@@ -139,4 +139,4 @@ filter_all=All files (*.*)
 err_open=Cannot open "%s".\nUnsupported format or corrupted file.
 err_folder=No playable audio files (MP3/MP4) found in "%s".
 about_title=About
-about_text=MusicPlayer %hs (app)\n\nAudio player for MP3 / MP4 (Windows).\nDecoding : FFmpeg %hs\nAudio : miniaudio\nPlugins : %d loaded\n\nShortcuts : Space = play/pause, S = stop,\n↑/↓ = volume, Ctrl+O = open
+about_text=Cantus %hs (app)\n\nAudio player for MP3 / MP4 (Windows).\nDecoding : FFmpeg %hs\nAudio : miniaudio\nPlugins : %d loaded\n\nShortcuts : Space = play/pause, S = stop,\n↑/↓ = volume, Ctrl+O = open

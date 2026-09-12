@@ -3,7 +3,7 @@
  * Contrairement à un service Windows (qui exige des droits
  * administrateur pour s'installer), l'autostart utilise la clé
  * HKCU\...\CurrentVersion\Run : AUCUN droit spécial requis. Le moteur
- * (musicplayer-core.exe) se lance au login, affiche une icône dans la
+ * (cantus-core.exe) se lance au login, affiche une icône dans la
  * zone de notification (clic droit : lancer le client / la page web /
  * quitter), et le client s'y connecte sans le relancer. */
 
@@ -14,14 +14,17 @@
 #include "svc.h"
 
 #define RUN_KEY L"Software\\Microsoft\\Windows\\CurrentVersion\\Run"
-#define RUN_VAL L"MusicPlayerCore"
+#define RUN_VAL L"CantusCore"
+/* Ancienne valeur d'autostart (renommage 2026.09.100) : nettoyée et
+ * migrée automatiquement vers RUN_VAL. */
+#define RUN_VAL_LEGACY L"MusicPlayerCore"
 
-/* Chemin du moteur : le dossier du client + musicplayer-core.exe */
+/* Chemin du moteur : le dossier du client + cantus-core.exe */
 static void svc_core_path(wchar_t* out, int outsz)
 {
     GetModuleFileNameW(NULL, out, outsz);
     wchar_t* slash = wcsrchr(out, L'\\');
-    if (slash) wcscpy(slash + 1, L"musicplayer-core.exe");
+    if (slash) wcscpy(slash + 1, L"cantus-core.exe");
 }
 
 /* 1 = l'autostart est activé (valeur Run présente). */
@@ -33,6 +36,7 @@ int svc_install(void)
     if (RegOpenKeyExW(HKEY_CURRENT_USER, RUN_KEY, 0, KEY_SET_VALUE, &k)
         != ERROR_SUCCESS)
         return -1;
+    RegDeleteValueW(k, RUN_VAL_LEGACY);   /* ancien nom (2026.09.100) */
     LONG r = RegSetValueExW(k, RUN_VAL, 0, REG_SZ,
                             (const BYTE*)exe,
                             (DWORD)((wcslen(exe) + 1) * sizeof(wchar_t)));
@@ -47,10 +51,41 @@ int svc_uninstall(void)
         != ERROR_SUCCESS)
         return -1;
     LONG r = RegDeleteValueW(k, RUN_VAL);
+    LONG r2 = RegDeleteValueW(k, RUN_VAL_LEGACY);   /* ancien nom */
     RegCloseKey(k);
-    if (r == ERROR_SUCCESS) return 0;
+    if (r == ERROR_SUCCESS || r2 == ERROR_SUCCESS) return 0;
     if (r == ERROR_FILE_NOT_FOUND) return 1;   /* déjà absent */
     return -1;
+}
+
+/* Migration du renommage 2026.09.100 : si l'ancien autostart
+ * « MusicPlayerCore » existe (et pas le nouveau), le transfère vers
+ * Cantus — l'utilisateur garde son choix « démarrer avec Windows ».
+ * Sans effet sinon. Idempotent. */
+void svc_migrate_legacy(void)
+{
+    HKEY k;
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, RUN_KEY, 0,
+                      KEY_QUERY_VALUE | KEY_SET_VALUE, &k) != ERROR_SUCCESS)
+        return;
+    if (RegQueryValueExW(k, RUN_VAL_LEGACY, NULL, NULL, NULL, NULL)
+        != ERROR_SUCCESS) {
+        RegCloseKey(k);
+        return;   /* rien à migrer */
+    }
+    if (RegQueryValueExW(k, RUN_VAL, NULL, NULL, NULL, NULL)
+        == ERROR_SUCCESS) {
+        RegDeleteValueW(k, RUN_VAL_LEGACY);   /* déjà migré */
+        RegCloseKey(k);
+        return;
+    }
+    wchar_t exe[MAX_PATH];
+    svc_core_path(exe, MAX_PATH);
+    if (RegSetValueExW(k, RUN_VAL, 0, REG_SZ, (const BYTE*)exe,
+                       (DWORD)((wcslen(exe) + 1) * sizeof(wchar_t)))
+        == ERROR_SUCCESS)
+        RegDeleteValueW(k, RUN_VAL_LEGACY);
+    RegCloseKey(k);
 }
 
 /* Lance le moteur maintenant (mode normal, avec l'icône de la barre). */
@@ -71,7 +106,7 @@ int svc_start(void)
     return 0;
 }
 
-/* Arrête le moteur (terminaison du processus musicplayer-core.exe). */
+/* Arrête le moteur (terminaison du processus cantus-core.exe). */
 int svc_stop(void)
 {
     HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -81,7 +116,7 @@ int svc_stop(void)
     int rc = 1;   /* pas trouvé = déjà arrêté */
     if (Process32FirstW(snap, &pe)) {
         do {
-            if (_wcsicmp(pe.szExeFile, L"musicplayer-core.exe") == 0) {
+            if (_wcsicmp(pe.szExeFile, L"cantus-core.exe") == 0) {
                 HANDLE h = OpenProcess(PROCESS_TERMINATE, FALSE, pe.th32ProcessID);
                 if (h) {
                     if (TerminateProcess(h, 0)) rc = 0;
@@ -119,7 +154,7 @@ int svc_running(void)
     int rc = 0;
     if (Process32FirstW(snap, &pe)) {
         do {
-            if (_wcsicmp(pe.szExeFile, L"musicplayer-core.exe") == 0) {
+            if (_wcsicmp(pe.szExeFile, L"cantus-core.exe") == 0) {
                 rc = 1;
                 break;
             }

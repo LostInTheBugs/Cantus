@@ -1,4 +1,4 @@
-# MusicPlayer Plugins
+# Cantus Plugins
 
 Drop plugin DLLs here: they are loaded at startup
 (menu **Plugins ▸ Reload** to reload without restarting).
@@ -54,5 +54,5 @@ x86_64-w64-mingw32-gcc -O2 -shared -o my_plugin.dll my_plugin.c \
 
 ## Log
 
-Plugin load/errors are written to `musicplayer.log`
+Plugin load/errors are written to `cantus.log`
 (next to the exe) — handy to debug a DLL that fails to load.

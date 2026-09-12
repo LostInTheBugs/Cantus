@@ -1,6 +1,36 @@
 # Changelog
 
-All notable changes to MusicPlayer are documented in this file.
+All notable changes to Cantus are documented in this file.
+
+## [2026.09.100] — 2026-09-13 — Renamed to Cantus (new name, new logo)
+
+### Changed — the project is now called Cantus
+
+- **Repository renamed**: `LostInTheBugs/MusicPlayer` → `LostInTheBugs/Cantus`
+  (GitHub redirects the old URLs; update your git remotes).
+- **Executables renamed**: `MusicPlayer.exe` → `Cantus.exe` (launcher),
+  `MusicPlayerApp.exe` → `CantusApp.exe` (client),
+  `musicplayer-core.exe` → `cantus-core.exe` (engine).
+- **New logo and app icon** — family style (navy plaque + gold glyph:
+  two beamed notes), used for the EXE icons (launcher and client), the
+  window/taskbar icon, the engine tray icon, and the README lockup.
+- **Release assets renamed**: `Cantus-<version>-win64.zip` and
+  `Cantus-<version>-win64-full.zip`. The updater built into the old
+  *MusicPlayer* versions looks for the old asset name and therefore cannot
+  auto-update to this version — install this one manually (unzip); from
+  this version on, the in-app updater works again.
+- **Automatic migration on first run**:
+  - `%APPDATA%\MusicPlayer` is moved to `%APPDATA%\Cantus` (configuration,
+    `plugins.ini`, whisper models, podcasts, transcripts…);
+  - the "start with Windows" entry (`MusicPlayerCore` in the HKCU *Run*
+    key) is transferred to `CantusCore`, keeping the user's choice;
+  - the update script also stops a legacy `MusicPlayerCore` service, if any.
+- **Internal names**: configuration directory `%APPDATA%\Cantus`, plugin
+  repository URLs `…/Cantus/…`, log files `logs/cantus.log` /
+  `logs/cantus-core.log`, HTTP user-agent strings `Cantus-*`, window
+  class names `Cantus*`.
+- **Docs** (README, API.md, PLUGINS.md, NOTICE) updated to the new name;
+  the historical entries of this changelog keep the old name on purpose.
 
 ## [2026.08.100-c8] — 2026-08-09 — diagnostic (playlist sync trace)
 

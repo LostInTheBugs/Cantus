@@ -26,3 +26,4 @@ build/
 claude/
 src/version_client.rc
 src/version_core.rc
+src/version_launcher.rc

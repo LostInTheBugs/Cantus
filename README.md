@@ -1,4 +1,10 @@
-# MusicPlayer
+# Cantus
+
+![Cantus](assets/cantus-lockup.png)
+
+> Formerly **MusicPlayer** — renamed to **Cantus** in version `2026.09.100`
+> (same player, same project; the repo lives at
+> `github.com/LostInTheBugs/Cantus`).
 
 A **MP3 / MP4 audio player for Windows 11**, written in C (Win32 API),
 cross-compiled from Linux with MinGW-w64.
@@ -12,16 +18,16 @@ cross-compiled from Linux with MinGW-w64.
 - **CD audio playback**: File ▸ Open CD… (MCI) — tracks listed as “CD Track N”, auto-advance
 - **Podcasts**: File ▸ Podcasts… — subscribe to RSS feeds (episodes streamed directly from their URL by the engine, read/unread, resume position, offline download to any folder via a save dialog); **Playlist** button loads the podcast episodes into the Playlist window without starting playback; **Search…** finds podcasts in directories (Apple Podcasts by default — add more sources: Listen Notes, Podcast Index…, or direct RSS feeds, like the plugin repositories)
 - **Now playing panel (podcasts)**: title, description and **offline transcription** (Plugins ▸ Whisper models… — download official whisper.cpp models directly or add a local one, pick the default; live **progress bar + %** while transcribing, scrollable transcript below)
-- **FFmpeg 9.0 runtime as a base plugin**: the launcher (`MusicPlayer.exe`) downloads the decoding DLLs automatically on first run (LGPL, replaceable — see Settings ▸ Plugin repository…, entry “FFmpeg runtime”)
+- **FFmpeg 9.0 runtime as a base plugin**: the launcher (`Cantus.exe`) downloads the decoding DLLs automatically on first run (LGPL, replaceable — see Settings ▸ Plugin repository…, entry “FFmpeg runtime”)
 - **Web server (remote control)**: Settings ▸ Web server… — open the page from your phone/tablet: control playback, see metadata (title/artist/album/year), the cover, the playlist with the current track highlighted, and pick the audio output: this computer, phone, or both (WAV stream)
 - **DJ Mixing**: 2-deck mixer on the web page (volume, pitch ±12 %, 3-band EQ, crossfader, via Web Audio API) **and** on the computer itself (console with per-deck play/pause/stop, volumes, crossfader, pitch — deck B is a real second decoder **in the engine**, mixed into the stream and sent to every client); the mode is synchronized both ways (Settings ▸ DJ Mixing ⇄ web)
-- **Session persistence** (`config.yml` in `%APPDATA%\MusicPlayer`): volume, speed, last folder/file and web server config are saved on exit and restored on startup — playlists are rescanned (new files added, removed files dropped) and playback resumes on the current track
+- **Session persistence** (`config.yml` in `%APPDATA%\Cantus`): volume, speed, last folder/file and web server config are saved on exit and restored on startup — playlists are rescanned (new files added, removed files dropped) and playback resumes on the current track
 - **True fullscreen** (F11 or the ⛶ button): covers the monitor under the cursor; **multi-screen fullscreen** configurable in Settings ▸ Interface… — number of screens used (auto-detected) and per-screen content: visual effect, playlist, lyrics or cover
 - **Playlist window** (Ctrl+L): numbered tracks, current track highlighted, double-click to play
 - **Progress bar** with color gradient
 - **Skins** (Plugins ▸ Skins): 11 skins — color palettes and **full-window skins** (radio, Winamp) with background image, per-skin layout (hidden menu + right-click, controls on top) and visualizer zone; choice in Settings ▸ Interface…
 - **Update checker**: Settings ▸ Update… — automatic (at startup), **fully automatic (check hourly, apply and restart)**, manual, or disabled — with **updates type** (all / fixes only `-cX`) and **delay** (0, 1 day, 1 week, 1 month)
-- **Client/server architecture**: the engine (`musicplayer-core.exe`) is separated from the UI (`MusicPlayer.exe`) — the engine exposes a **public REST API** (port 8080) documented in [API.md](API.md): state, playlist, cover, commands, audio stream (PCM WAV), audio levels; it also hosts the network service plugins (web server, UPnP, RTP, Multiroom) so they keep running without the interface. Default: the client launches the engine on startup and stops it on exit
+- **Client/server architecture**: the engine (`cantus-core.exe`) is separated from the UI (`Cantus.exe`) — the engine exposes a **public REST API** (port 8080) documented in [API.md](API.md): state, playlist, cover, commands, audio stream (PCM WAV), audio levels; it also hosts the network service plugins (web server, UPnP, RTP, Multiroom) so they keep running without the interface. Default: the client launches the engine on startup and stops it on exit
 - **Multilingual**: plain-text `lang/*.lang` files (English built-in, French provided, Settings ▸ Interface… — see [lang/README.md](lang/README.md))
 - **Plugin architecture** (skins, audio effects, visuals, services) — API version 3:
   - **Visuals**: color spectrum, rotating 3D spectrum (rainbow), 3D isometric landscape, LED VU meter, fireworks, fractal plasma, hypnotic tunnel — all synced to the music
@@ -31,18 +37,18 @@ cross-compiled from Linux with MinGW-w64.
 
 ## Version
 
-`2026.08.100-c8` — see [CHANGELOG.md](CHANGELOG.md)
+`2026.09.100` — see [CHANGELOG.md](CHANGELOG.md)
 
 ## Run on Windows 11
 
-1. Copy the `bin/` folder (or unzip `dist/MusicPlayer-2026.08.039-win64.zip`)
+1. Copy the `bin/` folder (or unzip `dist/Cantus-2026.09.100-win64.zip`)
    to the Windows machine.
-2. Run `MusicPlayer.exe`. No installation required
+2. Run `Cantus.exe`. No installation required
    (the FFmpeg DLLs are in the same folder).
-   `musicplayer-core.exe` (the engine) is launched and stopped
+   `cantus-core.exe` (the engine) is launched and stopped
    automatically by the client.
 
-> The `plugins/` folder must sit next to `MusicPlayer.exe`:
+> The `plugins/` folder must sit next to `Cantus.exe`:
 > it is created automatically on first launch if missing.
 
 ## Development on Linux (this repo)
@@ -67,7 +73,7 @@ curl -L -o vendor/miniaudio.h \
 Build and test:
 
 ```bash
-make          # → bin/MusicPlayer.exe (+ FFmpeg DLLs)
+make          # → bin/Cantus.exe (+ FFmpeg DLLs)
 make test     # builds, generates test files and plays them under Wine
 make zip      # portable Windows archive
 ```
@@ -78,7 +84,7 @@ The same Makefile works on macOS with the MinGW-w64 toolchain:
 
 ```bash
 brew install mingw-w64
-make          # → bin/MusicPlayer.exe — identical output, no code change
+make          # → bin/Cantus.exe — identical output, no code change
 make zip      # portable Windows archive
 ```
 
@@ -95,7 +101,7 @@ would require pairing it with a native UI (not included).
 
 Since 2026.08.039 the player is split in two executables:
 
-| | `musicplayer-core.exe` (engine) | `MusicPlayer.exe` (client) |
+| | `cantus-core.exe` (engine) | `Cantus.exe` (client) |
 |---|---|---|
 | Role | Playlist, FFmpeg decoding, CD, **network service plugins** (web server 8000, REST 8080, UPnP 8081, RTP/AES67, Multiroom) | Window, menus, skins, visuals, equalizer, **local audio output** (miniaudio), TeamSpeak Broadcast |
 | Audio | Decodes and **streams the PCM**; the position advances at the pace of the clients reading `/stream` | Receives `/stream` and plays it on the local sound card |
@@ -144,7 +150,7 @@ Menu **Plugins ▸ Reload** to load/unload without restarting.
 ## Project layout
 
 ```
-MusicPlayer/
+Cantus/
 ├── Makefile               # cross-build Linux → Windows
 ├── src/
 │   ├── main.c             # client: Win32 UI (menus, buttons, slider, D&D, i18n)
@@ -172,12 +178,12 @@ This project was built entirely through AI-assisted sessions (Hermes Agent). Usa
 
 | Metric | deepseek-v4-flash | deepseek-v4-pro | **Total** |
 |---|---|---|---|
-| Input tokens | 9 854 124 | 344 314 | **10 198 438** |
-| Output tokens | 5 098 194 | 110 536 | **5 208 730** |
-| **Subtotal (input + output)** | **14 952 318** | **454 850** | **15 407 168** |
-| Cache read (reused at reduced price) | 1 387 431 936 | 31 611 264 | **1 419 043 200** |
-| API calls | 4 929 | 229 | **5 158** |
-| **Estimated cost** | **≈ 6.32 USD** | **≈ 0.36 USD** | **≈ 6.67 USD** |
+| Input tokens | 9 858 278 | 344 314 | **10 202 592** |
+| Output tokens | 5 104 439 | 110 536 | **5 214 975** |
+| **Subtotal (input + output)** | **14 962 717** | **454 850** | **15 417 567** |
+| Cache read (reused at reduced price) | 1 389 711 616 | 31 611 264 | **1 421 322 880** |
+| API calls | 4 941 | 229 | **5 170** |
+| **Estimated cost** | **≈ 6.32 USD** | **≈ 0.36 USD** | **≈ 6.68 USD** |
 
 Full breakdown: [TOKENS.md](TOKENS.md).
 

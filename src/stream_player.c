@@ -224,7 +224,7 @@ static DWORD WINAPI stream_thread(LPVOID arg)
 {
     (void)arg;
     while (!g_stop) {
-        HINTERNET inet = InternetOpenA("MusicPlayer-Client/1.0",
+        HINTERNET inet = InternetOpenA("Cantus-Client/1.0",
                                        INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
         if (!inet) { Sleep(1000); continue; }
         char path[64];

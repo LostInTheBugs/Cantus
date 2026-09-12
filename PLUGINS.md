@@ -1,6 +1,6 @@
-# Writing MusicPlayer plugins
+# Writing Cantus plugins
 
-MusicPlayer is extensible through plugins: small Windows DLLs that are
+Cantus is extensible through plugins: small Windows DLLs that are
 dropped into a folder — **no compilation of the main program needed**.
 This guide explains the plugin API (version 4), how to build a plugin,
 how to install it, and how to write a skin.
@@ -9,9 +9,9 @@ how to install it, and how to write a skin.
 
 | Folder | Loaded by | Purpose |
 |---|---|---|
-| `plugins/` (next to `MusicPlayer.exe`) | client | visuals, audio effects, skins, client services (TeamSpeak…) |
-| `skins/` (next to `MusicPlayer.exe`) | client | skins (kept separate since v026) |
-| `core_plugins/` (next to `musicplayer-core.exe`) | engine | network services: web server, REST API, UPnP, RTP, Multiroom, cover, metadata |
+| `plugins/` (next to `Cantus.exe`) | client | visuals, audio effects, skins, client services (TeamSpeak…) |
+| `skins/` (next to `Cantus.exe`) | client | skins (kept separate since v026) |
+| `core_plugins/` (next to `cantus-core.exe`) | engine | network services: web server, REST API, UPnP, RTP, Multiroom, cover, metadata |
 
 **Installing a third-party plugin is a simple file copy** into the right
 folder. The player loads it at startup (or hot-reloads it if you click
@@ -81,7 +81,7 @@ Your `init()` hook receives `const mp_host_api* host` — keep it and call
 it from any thread. The important entry points:
 
 ```c
-host->log(msg);                    /* write to musicplayer.log */
+host->log(msg);                    /* write to cantus.log */
 host->get_state();                 /* 0 stopped, 1 playing, 2 paused… */
 host->get_position();              /* seconds */
 host->get_duration();
@@ -127,7 +127,7 @@ static const mp_skin_colors colors = {
 host->skin_set_colors(&colors);
 
 /* optional background image (PNG/JPEG/BMP, UTF-8 path) */
-host->skin_set_bg("C:\\MusicPlayer\\skins\\mybg.png");
+host->skin_set_bg("C:\\Cantus\\skins\\mybg.png");
 
 /* visualizer zone (window-relative) */
 host->skin_set_visual_rect(10, 40, 620, 180);
@@ -166,6 +166,6 @@ the update checker can fetch a newer DLL without a program update.
 Third-party plugins can be distributed through any **plugin repository**
 (see Settings ▸ Plugin repository…): a plain HTTP(S) URL serving a
 `plugins.json` index plus the DLL files. The default repository is the
-project's own (https://github.com/LostInTheBugs/MusicPlayer) and lists
+project's own (https://github.com/LostInTheBugs/Cantus) and lists
 the project's plugins and skins — download them from inside the app, no
 manual copying needed.

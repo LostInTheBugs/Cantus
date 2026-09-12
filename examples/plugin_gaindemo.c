@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — plugin : booster de volume sonore.
+ * Cantus — plugin : booster de volume sonore.
  * Type : effet audio. Amplifie le signal (+25 %) avec écrêtage.
  * Activation : Settings ▸ Plugins.
  */

@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "3D Isometric" (paysage de barres 3D)
+ * Plugin Cantus — "3D Isometric" (paysage de barres 3D)
  * ==========================================================
  * Type : visuel. Style "GLBars" / WM3DSpectrum : grille rectangulaire
  * de barres en perspective (les rangées du fond sont plus petites et

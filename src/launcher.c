@@ -1,7 +1,7 @@
 /*
- * MusicPlayer.exe — lanceur
+ * Cantus.exe — lanceur
  * ==========================
- * Le client (MusicPlayerApp.exe) importe statiquement les DLL FFmpeg :
+ * Le client (CantusApp.exe) importe statiquement les DLL FFmpeg :
  * sans elles, le chargeur Windows refuse de démarrer le processus.
  * Ce lanceur (qui n'importe AUCUNE DLL FFmpeg) vérifie la présence du
  * runtime de décodage (plugin de base téléchargeable) et le télécharge
@@ -80,7 +80,7 @@ static int ffmpeg_present(void)
 /* télécharge url → dest ; retourne 0 si > 100 Ko reçus (pas une erreur) */
 static int http_download(const wchar_t* url, const wchar_t* dest)
 {
-    HINTERNET inet = InternetOpenW(L"MusicPlayer", INTERNET_OPEN_TYPE_DIRECT,
+    HINTERNET inet = InternetOpenW(L"Cantus", INTERNET_OPEN_TYPE_DIRECT,
                                    NULL, NULL, 0);
     if (!inet) return -1;
     DWORD to = 60000;
@@ -198,10 +198,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nShow)
             L"automatic download failed.\n\n"
             L"Expected folder: %ls\n\n"
             L"Manual fix: download the FULL zip of your version from\n"
-            L"https://github.com/LostInTheBugs/MusicPlayer/releases\n"
+            L"https://github.com/LostInTheBugs/Cantus/releases\n"
             L"and extract its content into this folder, then restart "
-            L"MusicPlayer.", exe);
-        MessageBoxW(NULL, msg, L"MusicPlayer", MB_ICONERROR);
+            L"Cantus.", exe);
+        MessageBoxW(NULL, msg, L"Cantus", MB_ICONERROR);
         return 1;
     }
 
@@ -209,7 +209,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nShow)
     wchar_t exe[MAX_PATH];
     GetModuleFileNameW(NULL, exe, MAX_PATH);
     wchar_t* slash = wcsrchr(exe, L'\\');
-    if (slash) wcscpy(slash + 1, L"MusicPlayerApp.exe");
+    if (slash) wcscpy(slash + 1, L"CantusApp.exe");
     wchar_t cmdline[1200];
     swprintf(cmdline, 1200, L"\"%ls\" %hs", exe, lpCmdLine ? lpCmdLine : "");
     STARTUPINFOW si;
@@ -218,8 +218,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nShow)
     PROCESS_INFORMATION pi;
     if (!CreateProcessW(exe, cmdline, NULL, NULL, FALSE, 0, NULL, NULL,
                         &si, &pi)) {
-        MessageBoxA(NULL, "Failed to start MusicPlayer.",
-                    "MusicPlayer", MB_ICONERROR);
+        MessageBoxA(NULL, "Failed to start Cantus.",
+                    "Cantus", MB_ICONERROR);
         return 1;
     }
     CloseHandle(pi.hThread);

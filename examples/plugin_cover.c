@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — plugin : jaquette (cover art).
+ * Cantus — plugin : jaquette (cover art).
  * Type SERVICE. Affiche l'image de la chanson en cours : jaquette
  * intégrée au MP3 (frame APIC des balises ID3v2) ou fichier
  * cover.jpg / folder.jpg / cover.png / front.jpg placé à côté du

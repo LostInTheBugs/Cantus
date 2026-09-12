@@ -1,7 +1,7 @@
 #ifndef MP_SVC_H
 #define MP_SVC_H
 
-/* Démarrage automatique du moteur (musicplayer-core.exe) au login :
+/* Démarrage automatique du moteur (cantus-core.exe) au login :
  * clé HKCU\...\CurrentVersion\Run — AUCUN droit administrateur requis.
  * Le moteur lancé au login affiche une icône dans la zone de
  * notification (clic droit : client / page web / quitter).
@@ -13,6 +13,10 @@ int  svc_install(void);    /* active l'autostart au login */
 int  svc_uninstall(void);  /* désactive l'autostart */
 int  svc_start(void);      /* lance le moteur maintenant */
 int  svc_stop(void);       /* arrête le moteur (processus) */
+
+/* Migration 2026.09.100 : transfère l'autostart « MusicPlayerCore »
+ * (ancien nom) vers « CantusCore ». Idempotent, appelé au démarrage. */
+void svc_migrate_legacy(void);
 
 /* 1 = autostart activé, 0 = non, -1 = erreur */
 int  svc_installed(void);

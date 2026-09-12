@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /* Lecteur de flux du client : reçoit le PCM du moteur (/stream du
- * musicplayer-core.exe) et le joue sur la carte son locale.
+ * cantus-core.exe) et le joue sur la carte son locale.
  *
  * Le callback local applique, dans l'ordre :
  *   1. le mix DJ local (platine B, mp_dj_mix_into)

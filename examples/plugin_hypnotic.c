@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "Hypnotic" (tunnel hypnotique)
+ * Plugin Cantus — "Hypnotic" (tunnel hypnotique)
  * ===================================================
  * Type : visuel. Anneaux concentriques rotatifs à des vitesses
  * différentes, couleurs qui défilent, pulsation au rythme de la musique.

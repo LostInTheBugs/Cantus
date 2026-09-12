@@ -11,7 +11,7 @@
  *   GET  /progress                 → current task state
  *
  * Pipeline: source → ffmpeg (WAV 16 kHz mono PCM) → whisper-cli.exe (-oj)
- * → JSON → %APPDATA%\MusicPlayer\transcripts\<hash>.json
+ * → JSON → %APPDATA%\Cantus\transcripts\<hash>.json
  *
  * One file at a time: if /progress says busy, the client must wait.
  */
@@ -174,7 +174,7 @@ static int appdata_path(const wchar_t* sub, wchar_t* out, int out_chars)
      * jamais localisés (bug depuis la création du plugin) */
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, base) != S_OK)
         return -1;
-    _snwprintf(out, out_chars, L"%ls\\MusicPlayer\\%ls", base, sub);
+    _snwprintf(out, out_chars, L"%ls\\Cantus\\%ls", base, sub);
     return 0;
 }
 
@@ -196,7 +196,7 @@ static void store_dir(wchar_t* out, int out_chars)
 {
     if (appdata_path(L"transcripts", out, out_chars) != 0)
         _snwprintf(out, out_chars, L"%ls\\transcripts",
-                   L"C:\\Users\\Public\\MusicPlayer");
+                   L"C:\\Users\\Public\\Cantus");
     mkdirs(out);
 }
 
@@ -204,7 +204,7 @@ static void models_dir(wchar_t* out, int out_chars)
 {
     if (appdata_path(L"whisper-models", out, out_chars) != 0)
         _snwprintf(out, out_chars, L"%ls\\whisper-models",
-                   L"C:\\Users\\Public\\MusicPlayer");
+                   L"C:\\Users\\Public\\Cantus");
     mkdirs(out);
 }
 
@@ -221,7 +221,7 @@ static int find_exe(const wchar_t* names[], int n_names, wchar_t* out,
     if (sl) *sl = 0;
     _snwprintf(appdir, MAX_PATH, L"%ls", base);
 
-    /* 1) %APPDATA%\MusicPlayer\whisper\  (ou ffmpeg\) */
+    /* 1) %APPDATA%\Cantus\whisper\  (ou ffmpeg\) */
     if (appdata_path(names[0], out, out_chars) == 0)
         if (GetFileAttributesW(out) != INVALID_FILE_ATTRIBUTES)
             return 0;
@@ -802,7 +802,7 @@ static void handle_transcribe(SOCKET c, const char* body)
     GetTempPathW(MAX_PATH, tmpbase);
     wchar_t tmpdir[MAX_PATH];
     _snwprintf(tmpdir, MAX_PATH,
-               L"%lsmusicplayer_transcribe\\%hs_%lld",
+               L"%lscantus_transcribe\\%hs_%lld",
                tmpbase, hash, (long long)GetTickCount64());
     mkdirs(tmpdir);
 
@@ -849,7 +849,7 @@ static void handle_transcribe(SOCKET c, const char* body)
             snprintf(msg, sizeof(msg),
                      "{\"ok\":0,\"error\":\"Model not found - download a "
                      "whisper.cpp model (e.g. ggml-medium.bin) into "
-                     "%%APPDATA%%\\\\MusicPlayer\\\\whisper-models\\\\\"}");
+                     "%%APPDATA%%\\\\Cantus\\\\whisper-models\\\\\"}");
             resp = _strdup(msg);
             rc = -1;
             goto cleanup;

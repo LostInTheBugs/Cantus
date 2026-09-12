@@ -1,7 +1,7 @@
-# MusicPlayer Core — Public API (client/server)
+# Cantus Core — Public API (client/server)
 
-Since version 2026.08.039 the engine (`musicplayer-core.exe`) is
-separate from the interface (`MusicPlayer.exe`). The engine exposes a
+Since version 2026.08.039 the engine (`cantus-core.exe`) is
+separate from the interface (`Cantus.exe`). The engine exposes a
 standard REST API on port **8080** (configurable via `svc_rest_port` in
 `config.yml`, or Settings ▸ Network… on the client).
 

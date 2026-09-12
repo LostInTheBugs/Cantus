@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin rétro années 60.
+ * Cantus — skin rétro années 60.
  * Pastel crème & orange, style sixties.
  */
 #include "plugin.h"

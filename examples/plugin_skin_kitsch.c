@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin kitsch.
+ * Cantus — skin kitsch.
  * Rose bonbon, violet & doré : assumé et décalé.
  */
 #include "plugin.h"

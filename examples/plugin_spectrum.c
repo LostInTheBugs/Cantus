@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "Spectrum" (visualiseur de spectre)
+ * Plugin Cantus — "Spectrum" (visualiseur de spectre)
  * ========================================================
  * Type : visuel. Analyse le flux audio (hook audio_frames) et dessine
  * un spectre logarithmique animé dans la zone d'affichage (~30 FPS).

@@ -126,8 +126,8 @@ static void sap_announce(SOCKET s)
 {
     const char* sdp =
         "v=0\r\n"
-        "o=MusicPlayer 0 0 IN IP4 " RTP_GROUP "\r\n"
-        "s=MusicPlayer Audio\r\n"
+        "o=Cantus 0 0 IN IP4 " RTP_GROUP "\r\n"
+        "s=Cantus Audio\r\n"
         "c=IN IP4 " RTP_GROUP "/1\r\n"
         "t=0 0\r\n"
         "m=audio " /* 5004 */ " RTP/AVP 10\r\n"

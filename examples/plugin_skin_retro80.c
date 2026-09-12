@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin rétro années 80.
+ * Cantus — skin rétro années 80.
  * Néon synthwave : rose, cyan, violet sur fond nuit.
  */
 #include "plugin.h"

@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — moteur de lecture
+ * Cantus — moteur de lecture
  * ===============================
  * Décodage : FFmpeg (libavformat/libavcodec) → resampling via
  * libswresample vers f32 stéréo → ring buffer SPSC → sortie miniaudio.

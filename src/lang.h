@@ -4,7 +4,7 @@
 #include <windows.h>
 
 /*
- * Système de langues de MusicPlayer.
+ * Système de langues de Cantus.
  *
  * Les traductions vivent dans des fichiers texte "lang/<code>.lang"
  * (UTF-8, format cle=valeur, '#' = commentaire, \n = retour à la ligne).

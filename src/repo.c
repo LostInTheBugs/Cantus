@@ -19,7 +19,7 @@
 static void repo_appdata_path(wchar_t* out, size_t cap, const wchar_t* file)
 {
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, out) == S_OK) {
-        wcscat_s(out, cap, L"\\MusicPlayer");
+        wcscat_s(out, cap, L"\\Cantus");
         CreateDirectoryW(out, NULL);
         wcscat_s(out, cap, file);
     } else {
@@ -98,7 +98,7 @@ static HINTERNET g_rep_inet = NULL;
 static int repo_http_get(const wchar_t* url, char** out_body, int* out_len)
 {
     if (!g_rep_inet)
-        g_rep_inet = InternetOpenW(L"MusicPlayer", INTERNET_OPEN_TYPE_DIRECT,
+        g_rep_inet = InternetOpenW(L"Cantus", INTERNET_OPEN_TYPE_DIRECT,
                                    NULL, NULL, 0);
     if (!g_rep_inet) return -1;
 

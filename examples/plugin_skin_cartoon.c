@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin cartoon.
+ * Cantus — skin cartoon.
  * Couleurs vives et joyeuses, style dessin animé.
  */
 #include "plugin.h"

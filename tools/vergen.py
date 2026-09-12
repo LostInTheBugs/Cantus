@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Génère la ressource VERSIONINFO Windows (onglet Détails) depuis VERSION.
 
-Usage: python3 tools/vergen.py VERSION out.rc client|core
+Usage: python3 tools/vergen.py VERSION out.rc client|launcher|core
 Écrit un fichier .rc autonome (aucune macro à passer au windres)."""
 
 import re
@@ -9,14 +9,19 @@ import sys
 
 META = {
     "client": {
-        "desc": "MusicPlayer - MP3/MP4 player (client)",
-        "orig": "MusicPlayer.exe",
-        "name": "MusicPlayer",
+        "desc": "Cantus - MP3/MP4 player (client)",
+        "orig": "CantusApp.exe",
+        "name": "Cantus",
+    },
+    "launcher": {
+        "desc": "Cantus - MP3/MP4 audio player",
+        "orig": "Cantus.exe",
+        "name": "Cantus",
     },
     "core": {
-        "desc": "MusicPlayer Core - headless engine (client/server)",
-        "orig": "musicplayer-core.exe",
-        "name": "MusicPlayer Core",
+        "desc": "Cantus Core - headless engine (client/server)",
+        "orig": "cantus-core.exe",
+        "name": "Cantus Core",
     },
 }
 

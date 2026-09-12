@@ -1,34 +1,37 @@
-# Token usage tracking — MusicPlayer
+# Token usage tracking — Cantus
 
 LLM token usage for this project, tallied session by session.
 
-## Cumulative tally (2026-08-09)
+## Cumulative tally (2026-09-13)
 
 | Metric | deepseek-v4-flash | deepseek-v4-pro | **Total** |
 |---|---|---|---|
 | Dev sessions (Hermes) | 2 | 1 | **3** |
 | Scripted agent sessions (API) | 0 | 0 | **0** |
-| Messages | 1 363 | 454 | **1 817** |
-| API calls | 4 929 | 229 | **5 158** |
-| Input tokens | 9 854 124 | 344 314 | **10 198 438** |
-| Output tokens | 5 098 194 | 110 536 | **5 208 730** |
-| **Subtotal (input + output)** | **14 952 318** | **454 850** | **15 407 168** |
-| Cache read (reused at reduced price) | 1 387 431 936 | 31 611 264 | **1 419 043 200** |
-| **Estimated cost** | **≈ 6.32 USD** | **≈ 0.36 USD** | **≈ 6.67 USD** |
+| Messages | 1 375 | 454 | **1 829** |
+| API calls | 4 941 | 229 | **5 170** |
+| Input tokens | 9 858 278 | 344 314 | **10 202 592** |
+| Output tokens | 5 104 439 | 110 536 | **5 214 975** |
+| **Subtotal (input + output)** | **14 962 717** | **454 850** | **15 417 567** |
+| Cache read (reused at reduced price) | 1 389 711 616 | 31 611 264 | **1 421 322 880** |
+| **Estimated cost** | **≈ 6.32 USD** | **≈ 0.36 USD** | **≈ 6.68 USD** |
 
 ## How to re-read the counter
 
-The Hermes session database (SQLite) holds the exact counters:
+The Hermes session database (SQLite) holds the exact counters
+(per session × model, in `session_model_usage`, joined on the sessions
+whose working directory is this project):
 
 ```bash
-sqlite3 ~/.hermes/state.db "SELECT id, started_at, model,
-  input_tokens, output_tokens, cache_read_tokens, cache_write_tokens,
-  reasoning_tokens, estimated_cost_usd
-  FROM sessions WHERE cwd LIKE '%MusicPlayer%'
-  ORDER BY started_at;"
+sqlite3 ~/.hermes/state.db "SELECT u.session_id, u.model,
+  SUM(u.input_tokens), SUM(u.output_tokens), SUM(u.cache_read_tokens),
+  SUM(u.api_call_count), SUM(u.estimated_cost_usd)
+  FROM session_model_usage u JOIN sessions s ON s.id = u.session_id
+  WHERE s.cwd LIKE '%MusicPlayer%'
+  GROUP BY u.session_id, u.model;"
 ```
 
-After each dev session, copy the matching row into the table above.
+After each dev session, update the table above from a fresh query.
 
 ## Notes
 
@@ -38,6 +41,7 @@ After each dev session, copy the matching row into the table above.
   (audits, releases, background tasks) attached to this project.
 - `reasoning_tokens` is probably included in `output_tokens`
   (to be confirmed with the provider).
-- Tally updated on 2026-08-09 — 100-c1 → c8 (podcast fixes: 562-episode
-  list, CDATA, playlist limits, sync block, repo regeneration). The
-  current session will be added at the next tally.
+- Tally updated on 2026-09-13 — **2026.09.100: renamed MusicPlayer →
+  Cantus** (new name, new logo, full rebrand). This tally includes the
+  final flush of the 100-c1 → c8 sessions; the rename session itself
+  will be added at the next tally.

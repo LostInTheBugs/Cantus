@@ -1,4 +1,4 @@
-# MusicPlayer Languages
+# Cantus Languages
 
 Each language is a plain-text `CODE.lang` file in this folder
 (`en.lang`, `fr.lang`, ...). **Anyone can add a language without
@@ -20,8 +20,8 @@ recompiling**: copy `en.lang` to `your_code.lang` and translate.
 
 ## How it works
 
-1. At startup, MusicPlayer uses the Windows language if available in
+1. At startup, Cantus uses the Windows language if available in
    `lang/`, otherwise English.
 2. **Language** menu: instant switch, remembered in
-   `%APPDATA%\MusicPlayer\lang.txt`.
+   `%APPDATA%\Cantus\lang.txt`.
 3. English is embedded in the program: it works even if `en.lang` is deleted.

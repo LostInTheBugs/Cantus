@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin épuré (minimal).
+ * Cantus — skin épuré (minimal).
  * Blanc, noir et un trait d'accent : le look moderne minimaliste.
  */
 #include "plugin.h"

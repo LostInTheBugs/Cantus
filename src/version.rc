@@ -2,13 +2,13 @@
 #include <winver.h>
 
 #ifndef MP_FILE_DESC
-#define MP_FILE_DESC "MusicPlayer"
+#define MP_FILE_DESC "Cantus"
 #endif
 #ifndef MP_ORIG_FILENAME
-#define MP_ORIG_FILENAME "MusicPlayer.exe"
+#define MP_ORIG_FILENAME "Cantus.exe"
 #endif
 #ifndef MP_PRODUCT_NAME
-#define MP_PRODUCT_NAME "MusicPlayer"
+#define MP_PRODUCT_NAME "Cantus"
 #endif
 
 VS_VERSION_INFO VERSIONINFO

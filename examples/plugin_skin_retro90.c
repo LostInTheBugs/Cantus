@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin rétro années 90.
+ * Cantus — skin rétro années 90.
  * Gris & teal : le look Windows 95.
  */
 #include "plugin.h"

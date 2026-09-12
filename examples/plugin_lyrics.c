@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — plugin : paroles (lyrics) des chansons.
+ * Cantus — plugin : paroles (lyrics) des chansons.
  * Type SERVICE. Lit le fichier .lrc placé à côté du morceau (même nom,
  * extension .lrc) et l'affiche dans une fenêtre.
  * Clic sur le plugin dans Plugins ▸ Services pour afficher/masquer.

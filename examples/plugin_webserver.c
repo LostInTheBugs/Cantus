@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — plugin : serveur web de contrôle à distance.
+ * Cantus — plugin : serveur web de contrôle à distance.
  *
  * Type SERVICE : la page web (télécommande) est servie depuis le
  * téléphone/tablette sur le même réseau. Activation/désactivation :
@@ -160,7 +160,7 @@ static const char PAGE_HTML[] =
 "<head>\n"
 "<meta charset=\"utf-8\">\n"
 "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,user-scalable=no\">\n"
-"<title>MusicPlayer Remote</title>\n"
+"<title>Cantus Remote</title>\n"
 "<style>\n"
 "*{box-sizing:border-box}\n"
 "body{margin:0;padding:14px;background:#0e1116;color:#e8eef4;font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto}\n"
@@ -188,7 +188,7 @@ static const char PAGE_HTML[] =
 "</head>\n"
 "<body>\n"
 "<div class=\"top\">\n"
-"<h1>MusicPlayer</h1>\n"
+"<h1>Cantus</h1>\n"
 "<div class=\"btns\">\n"
 "  <button class=\"btn big\" id=\"bPlay\"><svg viewBox=\"0 0 24 24\"><path d=\"M8 5v14l11-7z\"/></svg></button>\n"
 "  <button class=\"btn\" id=\"bStop\"><svg viewBox=\"0 0 24 24\"><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\"/></svg></button>\n"
@@ -468,7 +468,7 @@ static const char PAGE_DJ[] =
 ".vu span{flex:1;background:#1d2632}\n"
 ".vu span.on{background:#3ddc84}\n"
 "</style></head><body>\n"
-"<div class=\"top\"><a href=\"/\">← MusicPlayer</a><h1>🎚️ DJ Mixing</h1><a href=\"#\" onclick=\"fetch('/api/cmd',{method:'POST',headers:{'Content-Type':'application/json'},body:'dj'});setTimeout(function(){location.href='/'},300);return false\" style=\"color:#e67e22\">Quitter</a></div>\n"
+"<div class=\"top\"><a href=\"/\">← Cantus</a><h1>🎚️ DJ Mixing</h1><a href=\"#\" onclick=\"fetch('/api/cmd',{method:'POST',headers:{'Content-Type':'application/json'},body:'dj'});setTimeout(function(){location.href='/'},300);return false\" style=\"color:#e67e22\">Quitter</a></div>\n"
 "<div class=\"decks\">\n"
 "<div class=\"deck\">\n"
 "<h2>DECK A</h2>\n"

@@ -1,4 +1,4 @@
-MusicPlayer
+Cantus
 ===========
 Copyright (c) 2026 LostInTheBugs
 
@@ -12,7 +12,7 @@ Third-party components distributed in the release archives
   Built from the BtbN "win64-lgpl-shared" builds (FFmpeg n8.1),
   licensed under the GNU Lesser General Public License v2.1 or later.
   These libraries are linked dynamically (separate DLLs shipped next
-  to MusicPlayer.exe) and are NOT covered by this project's MIT
+  to Cantus.exe) and are NOT covered by this project's MIT
   license. See LICENSE-FFmpeg.txt in the release archives for the
   full license text, and https://github.com/BtbN/FFmpeg-Builds for
   the build sources.

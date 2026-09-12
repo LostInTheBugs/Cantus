@@ -1,4 +1,4 @@
-/* src/core/core_main.c — musicplayer-core.exe : le moteur, sans UI.
+/* src/core/core_main.c — cantus-core.exe : le moteur, sans UI.
  *
  * Le core héberge : le moteur audio (player.c, sans carte son : le PCM
  * est diffusé aux clients via /stream), la playlist, le CD, et les
@@ -31,7 +31,7 @@ void core_http_stop(void);
 void core_plist_init(void);
 
 /* ------------------------------------------------------------------ */
-/* Journal (logs/musicplayer-core.log) : niveau 0 = rien, 1 = erreurs, */
+/* Journal (logs/cantus-core.log) : niveau 0 = rien, 1 = erreurs, */
 /* 2 = info, 3 = debug. Le niveau est poussé par le client.            */
 /* ------------------------------------------------------------------ */
 static volatile LONG g_log_level = 2;
@@ -51,7 +51,7 @@ void core_log(const char* msg)
     wchar_t* slash = wcsrchr(exe, L'\\');
     if (slash) wcscpy(slash + 1, L"logs");
     CreateDirectoryW(exe, NULL);
-    if (slash) wcscpy(slash + 1, L"logs\\musicplayer-core.log");
+    if (slash) wcscpy(slash + 1, L"logs\\cantus-core.log");
     FILE* f = _wfopen(exe, L"a");
     if (f) {
         SYSTEMTIME st;
@@ -285,13 +285,13 @@ static void load_plugins(void)
 #define IDM_TRAY_EXIT   1003
 static HICON g_tray_icon = NULL;
 
-/* Lance le client (MusicPlayer.exe, à côté du core). */
+/* Lance le client (Cantus.exe, à côté du core). */
 static void tray_open_client(void)
 {
     wchar_t exe[MAX_PATH];
     GetModuleFileNameW(NULL, exe, MAX_PATH);
     wchar_t* slash = wcsrchr(exe, L'\\');
-    if (slash) wcscpy(slash + 1, L"MusicPlayer.exe");
+    if (slash) wcscpy(slash + 1, L"Cantus.exe");
     if (GetFileAttributesW(exe) != INVALID_FILE_ATTRIBUTES) {
         STARTUPINFOW si;
         PROCESS_INFORMATION pi;
@@ -316,7 +316,7 @@ static void tray_open_web(void)
 static void tray_menu(HWND hwnd)
 {
     HMENU m = CreatePopupMenu();
-    AppendMenuW(m, MF_STRING, IDM_TRAY_CLIENT, L"Open MusicPlayer client");
+    AppendMenuW(m, MF_STRING, IDM_TRAY_CLIENT, L"Open Cantus client");
     AppendMenuW(m, MF_STRING, IDM_TRAY_WEB, L"Open web remote");
     AppendMenuW(m, MF_SEPARATOR, 0, NULL);
     AppendMenuW(m, MF_STRING, IDM_TRAY_EXIT, L"Exit");
@@ -361,7 +361,7 @@ static LRESULT CALLBACK core_wnd_proc(HWND hwnd, UINT m, WPARAM w, LPARAM l)
 }
 
 /* ------------------------------------------------------------------ */
-/* Mode service Windows : `musicplayer-core.exe --service`             */
+/* Mode service Windows : `cantus-core.exe --service`             */
 /* L'installation se fait depuis le client (Settings ▸ Interface).     */
 /* ------------------------------------------------------------------ */
 static SERVICE_STATUS         g_svc_status;
@@ -393,7 +393,7 @@ static DWORD WINAPI svc_ctrl(DWORD ctrl, DWORD type, LPVOID data, LPVOID ctx)
 static void WINAPI svc_main(DWORD argc, LPTSTR* argv)
 {
     (void)argc; (void)argv;
-    g_svc_handle = RegisterServiceCtrlHandlerExW(L"MusicPlayerCore", svc_ctrl, NULL);
+    g_svc_handle = RegisterServiceCtrlHandlerExW(L"CantusCore", svc_ctrl, NULL);
     if (!g_svc_handle) return;
 
     g_svc_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
@@ -417,7 +417,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow)
 
     if (lpCmd && strstr(lpCmd, "--service")) {
         SERVICE_TABLE_ENTRYW table[] = {
-            { L"MusicPlayerCore", svc_main },
+            { L"CantusCore", svc_main },
             { NULL, NULL }
         };
         StartServiceCtrlDispatcherW(table);
@@ -445,7 +445,7 @@ static int run_core(HINSTANCE hInst)
     wc.hInstance = hInst;
     wc.lpszClassName = L"MPCoreWnd";
     RegisterClassW(&wc);
-    g_core_hwnd = CreateWindowW(L"MPCoreWnd", L"MusicPlayer Core",
+    g_core_hwnd = CreateWindowW(L"MPCoreWnd", L"Cantus Core",
                                 WS_OVERLAPPEDWINDOW, 0, 0, 0, 0,
                                 NULL, NULL, hInst, NULL);
 
@@ -454,7 +454,7 @@ static int run_core(HINSTANCE hInst)
         wchar_t exe[MAX_PATH];
         GetModuleFileNameW(NULL, exe, MAX_PATH);
         wchar_t* slash = wcsrchr(exe, L'\\');
-        if (slash) wcscpy(slash + 1, L"MusicPlayer.exe");
+        if (slash) wcscpy(slash + 1, L"Cantus.exe");
         HICON ic = (HICON)ExtractIconW(GetModuleHandleW(NULL), exe, 0);
         g_tray_icon = ic ? ic : LoadIcon(NULL, IDI_APPLICATION);
         NOTIFYICONDATAW nid;
@@ -465,7 +465,7 @@ static int run_core(HINSTANCE hInst)
         nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
         nid.uCallbackMessage = WM_APP + 2;
         nid.hIcon = g_tray_icon;
-        wcscpy(nid.szTip, L"MusicPlayer Core — clic droit : menu");
+        wcscpy(nid.szTip, L"Cantus Core — clic droit : menu");
         Shell_NotifyIconW(NIM_ADD, &nid);
     }
 

@@ -1,5 +1,5 @@
 # ======================================================================
-# MusicPlayer — lecteur audio MP3/MP4 pour Windows
+# Cantus — lecteur audio MP3/MP4 pour Windows
 # Compilation croisée Linux -> Windows via MinGW-w64.
 #
 # Dépendances (à laisser dans vendor/) :
@@ -7,13 +7,13 @@
 #   - vendor/ffmpeg/               (FFmpeg n8.1 win64-lgpl-shared, BtbN)
 #
 # Usage :
-#   make            -> bin/MusicPlayer.exe + DLLs FFmpeg
+#   make            -> bin/Cantus.exe + DLLs FFmpeg
 #   make test       -> compile + selftest sous Wine
 #   make zip        -> archive portable prête pour Windows 11
 #   make clean
 # ======================================================================
 
-VERSION := 2026.08.100-c8
+VERSION := 2026.09.100
 
 CROSS    := x86_64-w64-mingw32-
 CC       := $(CROSS)gcc
@@ -34,20 +34,20 @@ LDFLAGS  := -Lvendor/ffmpeg/lib \
 SRC := src/main.c src/player.c src/plugin_loader.c src/lang.c src/update.c src/config.c src/cd.c \
        src/client_core.c src/stream_player.c src/svc.c src/repo.c
 OBJ := $(SRC:.c=.o)
-RES := src/musicplayer_res.o
-BIN     := bin/MusicPlayer.exe       # lanceur (vérifie/télécharge le runtime FFmpeg)
-APP_BIN := bin/MusicPlayerApp.exe    # client (importe les DLL FFmpeg)
+RES := src/cantus_res.o
+BIN     := bin/Cantus.exe       # lanceur (vérifie/télécharge le runtime FFmpeg)
+APP_BIN := bin/CantusApp.exe    # client (importe les DLL FFmpeg)
 LAUNCHER_OBJ := src/launcher.o src/repo.o build/launcher_res.o
 
 # ----------------------------------------------------------------------
-# Core (musicplayer-core.exe) — moteur sans UI, API REST publique.
+# Core (cantus-core.exe) — moteur sans UI, API REST publique.
 # Même moteur (player.c) compilé avec -DMP_CORE : pas de carte son,
 # le flux part vers les clients via /stream.
 # ----------------------------------------------------------------------
 CORE_OBJ := build/core_main.o build/core_http.o build/core_playlist.o \
             build/core_player.o build/core_plugin_loader.o \
             build/core_config.o build/core_cd.o
-CORE_BIN := bin/musicplayer-core.exe
+CORE_BIN := bin/cantus-core.exe
 
 # DLLs FFmpeg nécessaires au runtime (à livrer à côté de l'exe)
 FFMPEG_DLLS := avcodec-63.dll avformat-63.dll avutil-61.dll swresample-7.dll avdevice-63.dll avfilter-12.dll swscale-10.dll ffmpeg.exe whisper-cli.exe ggml.dll ggml-base.dll whisper.dll ggml-cpu-alderlake.dll ggml-cpu-cannonlake.dll ggml-cpu-cascadelake.dll ggml-cpu-haswell.dll ggml-cpu-icelake.dll ggml-cpu-sandybridge.dll ggml-cpu-skylakex.dll ggml-cpu-sse42.dll ggml-cpu-x64.dll
@@ -75,12 +75,15 @@ bin/runtime: bin/VERSION
 bin/VERSION: VERSION
 	cp VERSION bin/VERSION
 
-build/launcher_res.o: src/version_client.rc Makefile
+build/launcher_res.o: src/launcher.rc src/cantus.ico src/version_launcher.rc Makefile
 	@mkdir -p build
-	$(WINDRES) -i src/version_client.rc -o $@
+	$(WINDRES) -i src/launcher.rc -o $@
 
-src/musicplayer_res.o: src/musicplayer.rc src/musicplayer.ico src/version_client.rc
-	$(WINDRES) -i src/musicplayer.rc -o $@
+src/version_launcher.rc: VERSION tools/vergen.py
+	python3 tools/vergen.py VERSION src/version_launcher.rc launcher
+
+src/cantus_res.o: src/cantus.rc src/cantus.ico src/version_client.rc
+	$(WINDRES) -i src/cantus.rc -o $@
 
 src/version_client.rc: VERSION tools/vergen.py
 	python3 tools/vergen.py VERSION src/version_client.rc client
@@ -200,7 +203,7 @@ plugins-examples: $(BIN)
 # Tests sous Wine (lecture, vitesse, pause, stop, fin de fichier)
 # ----------------------------------------------------------------------
 test: all core plugins-examples test-samples
-	cd bin && wine64 ./MusicPlayer.exe --selftest ../test/test.mp3 ../test/test.mp4; \
+	cd bin && wine64 ./Cantus.exe --selftest ../test/test.mp3 ../test/test.mp4; \
 	echo "exit code = $$?"; \
 	echo "--- selftest.log ---"; cat selftest.log
 
@@ -212,15 +215,15 @@ test: all core plugins-examples test-samples
 # depuis le téléphone fonctionne dès l'installation.
 # ----------------------------------------------------------------------
 zip: all plugins-examples dirs core
-	cd bin && zip -q ../dist/MusicPlayer-$(VERSION)-win64.zip MusicPlayer.exe MusicPlayerApp.exe musicplayer-core.exe LICENSE-FFmpeg.txt core_plugins/webserver.dll core_plugins/transcribe_whisper.dll core_plugins/podcasts.dll lang/*.lang VERSION && \
-	cd .. && echo "Archive : dist/MusicPlayer-$(VERSION)-win64.zip"
+	cd bin && zip -q ../dist/Cantus-$(VERSION)-win64.zip Cantus.exe CantusApp.exe cantus-core.exe LICENSE-FFmpeg.txt core_plugins/webserver.dll core_plugins/transcribe_whisper.dll core_plugins/podcasts.dll lang/*.lang VERSION && \
+	cd .. && echo "Archive : dist/Cantus-$(VERSION)-win64.zip"
 
 # zip COMPLET avec les DLL FFmpeg et TOUS les plugins du moteur
 # (podcasts, web, dlna…) — plan B manuel si le téléchargement
 # automatique du runtime échoue : extraire dans le dossier de l'exe
 zip-full: all plugins-examples dirs core
-	cd bin && zip -q ../dist/MusicPlayer-$(VERSION)-win64-full.zip MusicPlayer.exe MusicPlayerApp.exe musicplayer-core.exe $(FFMPEG_DLLS) LICENSE-FFmpeg.txt core_plugins/*.dll lang/*.lang VERSION && \
-	cd .. && echo "Archive : dist/MusicPlayer-$(VERSION)-win64-full.zip"
+	cd bin && zip -q ../dist/Cantus-$(VERSION)-win64-full.zip Cantus.exe CantusApp.exe cantus-core.exe $(FFMPEG_DLLS) LICENSE-FFmpeg.txt core_plugins/*.dll lang/*.lang VERSION && \
+	cd .. && echo "Archive : dist/Cantus-$(VERSION)-win64-full.zip"
 
 # ----------------------------------------------------------------------
 # Repository de plugins : copie les binaires dans repo/bin/ (à committer

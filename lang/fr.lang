@@ -1,4 +1,4 @@
-# MusicPlayer — fichier de langue français
+# Cantus — fichier de langue français
 # =========================================
 # Format : cle=valeur   (une par ligne)
 #   - '#' ou ';' en début de ligne = commentaire
@@ -137,4 +137,4 @@ filter_all=Tous les fichiers (*.*)
 err_open=Impossible d'ouvrir « %s ».\nFormat non supporté ou fichier corrompu.
 err_folder=Aucun fichier audio lisible (MP3/MP4) trouvé dans « %s ».
 about_title=À propos
-about_text=MusicPlayer %hs (appli)\n\nLecteur audio MP3 / MP4 pour Windows.\nDécodage : FFmpeg %hs\nAudio : miniaudio\nPlugins : %d chargé(s)\n\nRaccourcis : Espace = lecture/pause, S = stop,\n↑/↓ = volume, Ctrl+O = ouvrir
+about_text=Cantus %hs (appli)\n\nLecteur audio MP3 / MP4 pour Windows.\nDécodage : FFmpeg %hs\nAudio : miniaudio\nPlugins : %d chargé(s)\n\nRaccourcis : Espace = lecture/pause, S = stop,\n↑/↓ = volume, Ctrl+O = ouvrir

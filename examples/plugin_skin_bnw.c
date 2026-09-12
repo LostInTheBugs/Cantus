@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin noir & blanc.
+ * Cantus — skin noir & blanc.
  * Monochrome élégant.
  */
 #include "plugin.h"

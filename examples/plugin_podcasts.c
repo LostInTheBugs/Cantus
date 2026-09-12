@@ -16,7 +16,7 @@
  *   POST /refresh               → vérifie tous les flux (nouveaux épisodes)
  *   POST /download              → télécharge un épisode {"url":"..."}
  *
- * Données dans %APPDATA%\MusicPlayer\podcasts\ (podcasts.txt +
+ * Données dans %APPDATA%\Cantus\podcasts\ (podcasts.txt +
  * episodes.txt, une entrée par ligne, séparateur '|').
  */
 #include <winsock2.h>
@@ -139,7 +139,7 @@ static void source_save(void)
 static void store_dir(wchar_t* out, int cap)
 {
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, out) == S_OK) {
-        wcscat_s(out, cap, L"\\MusicPlayer\\podcasts");
+        wcscat_s(out, cap, L"\\Cantus\\podcasts");
         CreateDirectoryW(out, NULL);
     } else {
         wcscpy_s(out, cap, L"podcasts");
@@ -253,7 +253,7 @@ static int fetch_url(const char* url, char** out, int* out_len)
                      url, attempt + 1, 2);
             log_line(m);
         }
-        HINTERNET inet = InternetOpenW(L"MusicPlayer-Podcasts",
+        HINTERNET inet = InternetOpenW(L"Cantus-Podcasts",
                                        INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
         if (!inet) return -1;
         DWORD to = 20000;

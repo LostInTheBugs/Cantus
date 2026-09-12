@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — interface graphique Windows (Win32, Unicode)
+ * Cantus — interface graphique Windows (Win32, Unicode)
  * Menu, status bar, glisser-déposer, raccourcis clavier, mode --selftest.
  *
  * Conventions : toute l'UI est en UTF-16 (W). Les chemins de fichiers sont
@@ -53,7 +53,7 @@ static char* engine_http_get(const char* path, int* out_len)
     char upath[1024];
     snprintf(upath, sizeof(upath), "http://127.0.0.1:8080%s", path);
     MultiByteToWideChar(CP_UTF8, 0, upath, -1, url, 1200);
-    HINTERNET inet = InternetOpenW(L"MusicPlayer", INTERNET_OPEN_TYPE_DIRECT,
+    HINTERNET inet = InternetOpenW(L"Cantus", INTERNET_OPEN_TYPE_DIRECT,
                                    NULL, NULL, 0);
     if (!inet) return NULL;
     DWORD to = 15000;
@@ -95,7 +95,7 @@ static char* engine_http_post(const char* path, const char* body, int* out_len)
     char upath[1024];
     snprintf(upath, sizeof(upath), "http://127.0.0.1:8080%s", path);
     MultiByteToWideChar(CP_UTF8, 0, upath, -1, url, 1200);
-    HINTERNET inet = InternetOpenW(L"MusicPlayer", INTERNET_OPEN_TYPE_DIRECT,
+    HINTERNET inet = InternetOpenW(L"Cantus", INTERNET_OPEN_TYPE_DIRECT,
                                    NULL, NULL, 0);
     if (!inet) return NULL;
     DWORD to = 15000;
@@ -161,7 +161,7 @@ static int podcasts_available(void)
 #define MP_WIDE(x)  MP_WIDE2(x)
 #define MP_VERSION_W MP_WIDE(MP_VERSION)
 
-#define APP_TITLE L"MusicPlayer " MP_VERSION_W
+#define APP_TITLE L"Cantus " MP_VERSION_W
 
 /* IDs de commandes */
 enum {
@@ -381,7 +381,7 @@ static void wide_to_utf8(const wchar_t* in, char* out, int out_bytes)
 }
 
 /* ------------------------------------------------------------------ */
-/* Journal (logs/musicplayer.log) : niveau 0 = rien, 1 = erreurs,      */
+/* Journal (logs/cantus.log) : niveau 0 = rien, 1 = erreurs,      */
 /* 2 = info, 3 = debug. Le niveau vient de la config (Help ▸ Logs…).   */
 /* ------------------------------------------------------------------ */
 static volatile LONG g_log_level = 2;
@@ -403,7 +403,7 @@ static void log_write(int level, const char* msg)
     wchar_t* slash = wcsrchr(exe, L'\\');
     if (slash) wcscpy(slash + 1, L"logs");
     CreateDirectoryW(exe, NULL);
-    if (slash) wcscpy(slash + 1, L"logs\\musicplayer.log");
+    if (slash) wcscpy(slash + 1, L"logs\\cantus.log");
     FILE* f = _wfopen(exe, L"a");
     if (f) {
         SYSTEMTIME st;
@@ -1252,6 +1252,7 @@ static void do_open_folder_dialog(void)
 #define IDC_UPD_LBL     1005
 #define IDC_ABT_L1      1006
 #define IDC_ABT_L2      1007
+#define IDC_ABT_ICON    1009
 #define IDC_PLG_LIST    2005
 static int g_engine_plugins_start = 0;   /* 1ère ligne "engine" du dialog Plugins */
 static char g_engine_files[64][128];    /* noms de fichiers des plugins moteur */
@@ -1724,19 +1725,19 @@ static void whisper_models_dir(wchar_t* out, size_t cap)
 {
     wchar_t ap[MAX_PATH];
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, ap) == S_OK)
-        _snwprintf(out, cap, L"%ls\\MusicPlayer\\whisper-models", ap);
+        _snwprintf(out, cap, L"%ls\\Cantus\\whisper-models", ap);
     else
         _snwprintf(out, cap, L"whisper-models");
     CreateDirectoryW(out, NULL);
 }
 
-/* configuration : %APPDATA%\MusicPlayer\whisper.cfg (« model=<nom> ») —
+/* configuration : %APPDATA%\Cantus\whisper.cfg (« model=<nom> ») —
  * le modèle par défaut utilisé par la transcription */
 static void whisper_cfg_path(wchar_t* out, size_t cap)
 {
     wchar_t ap[MAX_PATH];
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, ap) == S_OK)
-        _snwprintf(out, cap, L"%ls\\MusicPlayer\\whisper.cfg", ap);
+        _snwprintf(out, cap, L"%ls\\Cantus\\whisper.cfg", ap);
     else
         _snwprintf(out, cap, L"whisper.cfg");
 }
@@ -1798,7 +1799,7 @@ static DWORD WINAPI whisper_dl_thread(LPVOID arg)
         L"ggml-%hs.bin", name);
 
     LONG rc = -2;
-    HINTERNET inet = InternetOpenW(L"MusicPlayer-Models/1.0",
+    HINTERNET inet = InternetOpenW(L"Cantus-Models/1.0",
                                    INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (inet) {
         DWORD to = 30000;
@@ -2636,7 +2637,7 @@ static INT_PTR CALLBACK repo_dlg_proc(HWND h, UINT m, WPARAM w, LPARAM l)
             if (rc == 0) {
                 wchar_t msg[600];
                 swprintf(msg, 600,
-                         L"%hs downloaded.\nRestart MusicPlayer to load it.",
+                         L"%hs downloaded.\nRestart Cantus to load it.",
                          g_repo_list[pi].name);
                 MessageBoxW(h, msg, L"Plugin repository", MB_OK);
             } else {
@@ -4872,12 +4873,16 @@ static INT_PTR CALLBACK about_dlg_proc(HWND h, UINT m, WPARAM w, LPARAM l)
         return dlg_skin_color(h, w, l);
     case WM_INITDIALOG: {
         wchar_t l1[160], l2[320];
-        swprintf(l1, 160, L"MusicPlayer %hs", MP_VERSION);
+        swprintf(l1, 160, L"Cantus %hs", MP_VERSION);
         swprintf(l2, 320, L"FFmpeg %hs · %d plugins",
                  av_version_info(), mp_plugins_count());
         SetDlgItemTextW(h, IDC_ABT_L1, l1);
         SetDlgItemTextW(h, IDC_ABT_L2, l2);
         SetWindowTextW(h, lang_get("about_title"));
+        /* emblème Cantus (ressource ID 1) dans la boîte À propos */
+        SendDlgItemMessageW(h, IDC_ABT_ICON, STM_SETICON,
+                            (WPARAM)LoadIconW(GetModuleHandleW(NULL),
+                                              MAKEINTRESOURCEW(1)), 0);
         return TRUE;
     }
     case WM_COMMAND:
@@ -4885,7 +4890,7 @@ static INT_PTR CALLBACK about_dlg_proc(HWND h, UINT m, WPARAM w, LPARAM l)
             EndDialog(h, 0);
         else if (LOWORD(w) == 2)
             ShellExecuteW(h, L"open",
-                          L"https://github.com/LostInTheBugs/MusicPlayer",
+                          L"https://github.com/LostInTheBugs/Cantus",
                           NULL, NULL, SW_SHOWNORMAL);
         return TRUE;
     }
@@ -5693,7 +5698,7 @@ static void paint_center(HDC hdc, RECT* rc)
             else {
                 warn = lang_get("now_plugins_outdated");
                 if (wcsncmp(warn, L"now_plugins_outdated", 21) == 0)
-                    warn = L"Engine plugins are outdated — close MusicPlayer, extract the update zip over the install folder, then restart";
+                    warn = L"Engine plugins are outdated — close Cantus, extract the update zip over the install folder, then restart";
             }
             RECT r = vis_rc;
             r.top = vis_rc.top + 62;
@@ -5907,13 +5912,13 @@ static void fsview_open_all(int nscreens)
      * le contenu configuré pour son écran (g_fs_mode[1..n]) */
     (void)nscreens;
     WNDCLASSW wc;
-    if (!GetClassInfoW(GetModuleHandleW(NULL), L"MusicPlayerFsView", &wc)) {
+    if (!GetClassInfoW(GetModuleHandleW(NULL), L"CantusFsView", &wc)) {
         memset(&wc, 0, sizeof(wc));
         wc.lpfnWndProc = fsview_proc;
         wc.hInstance = GetModuleHandleW(NULL);
         wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
         wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-        wc.lpszClassName = L"MusicPlayerFsView";
+        wc.lpszClassName = L"CantusFsView";
         RegisterClassW(&wc);
     }
     g_fs_win_count = 0;
@@ -5933,7 +5938,7 @@ static BOOL CALLBACK fsview_enum(HMONITOR mon, HDC hdc, LPRECT rc, LPARAM lp)
     if (mon == main_mon) return TRUE;
     if (g_fs_win_count >= g_fs_screens - 1) return FALSE;
     int mode = g_fs_mode[1 + g_fs_win_count];
-    HWND w = CreateWindowExW(WS_EX_TOPMOST, L"MusicPlayerFsView", L"",
+    HWND w = CreateWindowExW(WS_EX_TOPMOST, L"CantusFsView", L"",
                              WS_POPUP,
                              mi.rcMonitor.left, mi.rcMonitor.top,
                              mi.rcMonitor.right - mi.rcMonitor.left,
@@ -6223,13 +6228,13 @@ static void mouse_up(void)
 }
 
 /* ------------------------------------------------------------------ */
-/* Préférence de langue (persistée dans %APPDATA%\MusicPlayer)         */
+/* Préférence de langue (persistée dans %APPDATA%\Cantus)         */
 /* ------------------------------------------------------------------ */
 static void lang_pref_path(wchar_t* out, int out_chars)
 {
     wchar_t appdata[MAX_PATH];
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, appdata) == S_OK) {
-        swprintf(out, out_chars, L"%ls\\MusicPlayer", appdata);
+        swprintf(out, out_chars, L"%ls\\Cantus", appdata);
         CreateDirectoryW(out, NULL);
         wcscat(out, L"\\lang.txt");
     } else {
@@ -6710,7 +6715,7 @@ static int run_selftest(int argc, char** argv)
     FILE* log = fopen("selftest.log", "w");
     if (!log) return 2;
 
-    fprintf(log, "MusicPlayer " MP_VERSION " — self-test\n");
+    fprintf(log, "Cantus " MP_VERSION " — self-test\n");
     fprintf(log, "FFmpeg : %s\n", av_version_info());
 
     mp_init();
@@ -6801,7 +6806,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
     (void)hPrev; (void)nCmdShow;
     srand((unsigned)GetTickCount());   /* mode aléatoire de la playlist */
 
-    /* mode test : MusicPlayer.exe --selftest fichier1 fichier2 ... */
+    /* mode test : Cantus.exe --selftest fichier1 fichier2 ... */
     if (lpCmdLine && strstr(lpCmdLine, "--selftest")) {
         int argc = 0;
         char* argv[64];
@@ -6866,7 +6871,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
             fclose(uf);
             DeleteFileW(ulog);
             if (strncmp(buf, "FAIL", 4) == 0) {
-                MessageBoxA(NULL, buf, "MusicPlayer update", MB_ICONERROR);
+                MessageBoxA(NULL, buf, "Cantus update", MB_ICONERROR);
             } else if (strncmp(buf, "OK:", 3) == 0) {
                 char ver[64] = "";
                 const char* v = buf + 3;
@@ -6899,12 +6904,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
                                  "already applied or is newer.",
                                  ver, MP_VERSION);
                     }
-                    MessageBoxA(NULL, msg, "MusicPlayer update",
+                    MessageBoxA(NULL, msg, "Cantus update",
                                 zip_newer ? MB_ICONWARNING : MB_ICONINFORMATION);
                 }
             }
         }
     }
+
+    /* renommage 2026.09.100 : %APPDATA%\MusicPlayer → %APPDATA%\Cantus
+     * et autostart « MusicPlayerCore » → « CantusCore » (idempotents) */
+    config_migrate_legacy();
+    svc_migrate_legacy();
 
     cc_start();
     sp_start();   /* le client joue le flux du moteur (/stream) */
@@ -6957,14 +6967,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
     wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wc.lpszClassName = L"MusicPlayerWnd";
+    wc.lpszClassName = L"CantusWnd";
     if (!RegisterClassW(&wc)) {
         char dbg[256];
         _snprintf(dbg, sizeof(dbg), "RegisterClassW failed (err=%lu)", GetLastError());
         log_line(dbg);
     }
 
-    g_hwnd = CreateWindowExW(0, L"MusicPlayerWnd", APP_TITLE,
+    g_hwnd = CreateWindowExW(0, L"CantusWnd", APP_TITLE,
                              WS_OVERLAPPEDWINDOW,
                              CW_USEDEFAULT, CW_USEDEFAULT, 640, 600,
                              NULL, NULL, hInst, NULL);
@@ -6997,7 +7007,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
     }
 
     /* fichier ou dossier passé en ligne de commande :
-       "MusicPlayer.exe chemin.mp3" ou "MusicPlayer.exe C:\Musique" */
+       "Cantus.exe chemin.mp3" ou "Cantus.exe C:\Musique" */
     if (lpCmdLine && *lpCmdLine) {
         char file[MAX_PATH * 3];
         strncpy(file, lpCmdLine, sizeof(file) - 1);

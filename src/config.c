@@ -1,5 +1,5 @@
 /*
- * Configuration persistante (config.yml dans %APPDATA%\MusicPlayer).
+ * Configuration persistante (config.yml dans %APPDATA%\Cantus).
  * Format YAML simple : "clé: valeur" — une ligne par champ.
  * Migration : l'ancien web.txt est importé si config.yml n'existe pas.
  */
@@ -12,7 +12,7 @@
 
 app_config g_cfg;
 
-/* Répertoire de configuration (%APPDATA%\MusicPlayer).
+/* Répertoire de configuration (%APPDATA%\Cantus).
  * Si %APPDATA% est absent ou trop long : repli sur le dossier de l'exe. */
 static void appdata_dir(wchar_t* out, int chars)
 {
@@ -23,7 +23,7 @@ static void appdata_dir(wchar_t* out, int chars)
         wchar_t* slash = wcsrchr(out, L'\\');
         if (slash) *slash = 0;
     }
-    wcscat(out, L"\\MusicPlayer");
+    wcscat(out, L"\\Cantus");
     CreateDirectoryW(out, NULL);
 }
 
@@ -33,8 +33,26 @@ static void config_path(wchar_t* out, int chars)
     wcscat(out, L"\\config.yml");
 }
 
+/* Migration du renommage 2026.09.100 : %APPDATA%\MusicPlayer →
+ * %APPDATA%\Cantus (config, plugins.ini, modèles whisper, podcasts…).
+ * Sans effet si le nouveau dossier existe déjà ou si l'ancien est absent ;
+ * si le déplacement échoue (fichier verrouillé), l'application repart
+ * simplement sur un dossier neuf. Idempotent. */
+void config_migrate_legacy(void)
+{
+    wchar_t ap[MAX_PATH], oldd[MAX_PATH], newd[MAX_PATH];
+    DWORD n = GetEnvironmentVariableW(L"APPDATA", ap, MAX_PATH);
+    if (n == 0 || n >= MAX_PATH) return;
+    _snwprintf(oldd, MAX_PATH, L"%ls\\MusicPlayer", ap);
+    _snwprintf(newd, MAX_PATH, L"%ls\\Cantus", ap);
+    if (GetFileAttributesW(newd) != INVALID_FILE_ATTRIBUTES) return;
+    if (GetFileAttributesW(oldd) == INVALID_FILE_ATTRIBUTES) return;
+    MoveFileW(oldd, newd);
+}
+
 void config_load(void)
 {
+    config_migrate_legacy();
     /* valeurs par défaut */
     g_cfg.volume = 80;
     g_cfg.speed = 1.0f;
@@ -133,7 +151,7 @@ void config_save(void)
     config_path(path, MAX_PATH);
     FILE* f = _wfopen(path, L"w");
     if (!f) return;
-    fprintf(f, "# MusicPlayer configuration\n");
+    fprintf(f, "# Cantus configuration\n");
     fprintf(f, "volume: %d\n", g_cfg.volume);
     fprintf(f, "speed: %.2f\n", (double)g_cfg.speed);
     fprintf(f, "last_path: %s\n", g_cfg.last_path);

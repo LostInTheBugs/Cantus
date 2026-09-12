@@ -8,7 +8,7 @@
  *   - streaming : GET /media/N → WAV PCM 44,1 kHz stéréo
  *
  * Les appareils DLNA de la maison (TV, ampli, téléphone avec BubbleUPnP…)
- * découvrent "MusicPlayer" et peuvent lire les pistes de la playliste.
+ * découvrent "Cantus" et peuvent lire les pistes de la playliste.
  * Activable dans Plugins ▸ Services ▸ DLNA/UPnP.
  */
 #include <winsock2.h>
@@ -96,9 +96,9 @@ static void root_desc(SOCKET c)
         "<specVersion><major>1</major><minor>0</minor></specVersion>\r\n"
         "<device>\r\n"
         "<deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>\r\n"
-        "<friendlyName>MusicPlayer</friendlyName>\r\n"
+        "<friendlyName>Cantus</friendlyName>\r\n"
         "<manufacturer>LostInTheBugs</manufacturer>\r\n"
-        "<modelName>MusicPlayer</modelName>\r\n"
+        "<modelName>Cantus</modelName>\r\n"
         "<UDN>" UDN "</UDN>\r\n"
         "<serviceList><service>\r\n"
         "<serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>\r\n"
@@ -329,7 +329,7 @@ static void ssdp_reply(const char* st, const char* usn)
         "DATE: Thu, 01 Jan 1970 00:00:00 GMT\r\n"
         "EXT:\r\n"
         "LOCATION: http://%s:%d/rootDesc.xml\r\n"
-        "SERVER: MusicPlayer/1.0 UPnP/1.0 DLNADOC/1.50\r\n"
+        "SERVER: Cantus/1.0 UPnP/1.0 DLNADOC/1.50\r\n"
         "ST: %s\r\n"
         "USN: %s\r\n"
         "\r\n", ip, net_port(), st, usn);
@@ -354,7 +354,7 @@ static void ssdp_notify(const char* nts)
         "LOCATION: http://%s:%d/rootDesc.xml\r\n"
         "NT: %s\r\n"
         "NTS: %s\r\n"
-        "SERVER: MusicPlayer/1.0 UPnP/1.0 DLNADOC/1.50\r\n"
+        "SERVER: Cantus/1.0 UPnP/1.0 DLNADOC/1.50\r\n"
         "USN: %s\r\n"
         "\r\n", ip, net_port(),
         "upnp:rootdevice", nts,
@@ -528,7 +528,7 @@ static void pl_service(mp_plugin* self, int event, void* data)
             if (upnp_start() == 0) {
                 char msg[160];
                 snprintf(msg, sizeof(msg),
-                          "DLNA/UPnP: server on port %d (MusicPlayer)",
+                          "DLNA/UPnP: server on port %d (Cantus)",
                           net_port());
                 log_line(msg);
             } else {

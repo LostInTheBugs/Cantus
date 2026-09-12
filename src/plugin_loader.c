@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — chargeur de plugins
+ * Cantus — chargeur de plugins
  * Scanne le répertoire "plugins/" (à côté de l'exe), charge chaque DLL
  * exportant mp_plugin_entry et l'enregistre. Rechargement à chaud via
  * le menu Plugins > Recharger. Chemins en UTF-16, logs en UTF-8.
@@ -23,7 +23,7 @@ static void name_to_utf8(const wchar_t* in, char* out, int out_bytes)
 }
 
 /* ------------------------------------------------------------------ */
-/* Activation persistée : %APPDATA%\MusicPlayer\plugins.ini            */
+/* Activation persistée : %APPDATA%\Cantus\plugins.ini            */
 /* ------------------------------------------------------------------ */
 static void cfg_path(wchar_t* out, int chars)
 {
@@ -35,7 +35,7 @@ static void cfg_path(wchar_t* out, int chars)
         wchar_t* slash = wcsrchr(out, L'\\');
         if (slash) *slash = 0;
     }
-    wcscat(out, L"\\MusicPlayer");
+    wcscat(out, L"\\Cantus");
     CreateDirectoryW(out, NULL);
     wcscat(out, L"\\plugins.ini");
 }
@@ -345,7 +345,7 @@ const char* mp_plugins_get_title(const char* path)
 #include <shlobj.h>
 
 #define PLUGIN_MANIFEST_URL \
-    L"https://raw.githubusercontent.com/LostInTheBugs/MusicPlayer/master/repo/plugins.json"
+    L"https://raw.githubusercontent.com/LostInTheBugs/Cantus/master/repo/plugins.json"
 
 /* Canal pre-release ? (lecture locale de upd.txt : le moteur ne linke
  * pas repo.c/update.c) */
@@ -354,7 +354,7 @@ static int pre_channel_local(void)
     wchar_t path[MAX_PATH];
     if (SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, path) != S_OK)
         return 0;
-    wcscat_s(path, MAX_PATH, L"\\MusicPlayer\\upd.txt");
+    wcscat_s(path, MAX_PATH, L"\\Cantus\\upd.txt");
     FILE* f = _wfopen(path, L"r");
     if (!f) return 0;
     char buf[256];
@@ -372,7 +372,7 @@ static const wchar_t* plugin_manifest_url(void)
 {
     if (pre_channel_local())
         return L"https://raw.githubusercontent.com/LostInTheBugs/"
-               L"MusicPlayer/pre-release/repo/plugins.json";
+               L"Cantus/pre-release/repo/plugins.json";
     return PLUGIN_MANIFEST_URL;
 }
 
@@ -396,7 +396,7 @@ static int json_str(const char* json, const char* key, char* out, int max)
 
 static int http_download(const wchar_t* url, const wchar_t* out_path)
 {
-    HINTERNET inet = InternetOpenW(L"MusicPlayer-Plugins/1.0",
+    HINTERNET inet = InternetOpenW(L"Cantus-Plugins/1.0",
                                    INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (!inet) return -1;
     DWORD to = 15000;
@@ -429,7 +429,7 @@ int mp_plugins_check_updates(void)
 {
     if (!g_dir[0]) return 0;
     int updated = 0;
-    HINTERNET inet = InternetOpenW(L"MusicPlayer-Plugins/1.0",
+    HINTERNET inet = InternetOpenW(L"Cantus-Plugins/1.0",
                                    INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (!inet) return 0;
     DWORD to = 15000;

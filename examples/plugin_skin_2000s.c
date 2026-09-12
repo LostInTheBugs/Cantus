@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin années 2000.
+ * Cantus — skin années 2000.
  * Bleu glacier & argent, le glossy des années 2000.
  */
 #include "plugin.h"

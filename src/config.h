@@ -2,7 +2,7 @@
 #define MP_CONFIG_H
 
 /*
- * Configuration persistante de MusicPlayer (config.yml dans %APPDATA%).
+ * Configuration persistante de Cantus (config.yml dans %APPDATA%).
  * Sauvegardée à la fermeture, chargée au démarrage.
  */
 
@@ -34,6 +34,11 @@ typedef struct {
 } app_config;
 
 extern app_config g_cfg;
+
+/* Migration du renommage 2026.09.100 (MusicPlayer → Cantus) :
+ * déplace %APPDATA%\MusicPlayer vers %APPDATA%\Cantus si nécessaire.
+ * Idempotent — appelable au démarrage (client ET moteur). */
+void config_migrate_legacy(void);
 
 /* Charge la configuration (valeurs par défaut + migration web.txt). */
 void config_load(void);

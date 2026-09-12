@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — API plugins, version 2
+ * Cantus — API plugins, version 2
  * =====================================
  * Un plugin est une DLL Windows qui exporte la fonction :
  *
@@ -28,7 +28,7 @@
 #define MAX_PATH 260
 #endif
 
-/* API plugins MusicPlayer — version 4 */
+/* API plugins Cantus — version 4 */
 #define MP_PLUGIN_API_VERSION 4
 
 typedef enum {
@@ -62,13 +62,13 @@ typedef struct mp_skin_colors {
 #define MP_SERVICE_CLICK    2    /* clic sur le plugin dans le menu Plugins */
 
 /*
- * API offerte par l'hôte (MusicPlayer) aux plugins.
+ * API offerte par l'hôte (Cantus) aux plugins.
  * Tous les appels sont sûrs depuis le thread du plugin.
  */
 typedef struct mp_host_api {
     int api_version;
 
-    /* Écrit une ligne dans le journal de l'application (musicplayer.log). */
+    /* Écrit une ligne dans le journal de l'application (cantus.log). */
     void (*log)(const char* msg);
 
     /* État du lecteur : voir mp_state dans player.h */

@@ -1,5 +1,8 @@
 #include <windows.h>
-IDI_MUSICPLAYER ICON "musicplayer.ico"
+/* ID ordinal 1 : correspond à LoadIconW(..., MAKEINTRESOURCE(1)) du
+ * client (icône de la fenêtre et de la barre des tâches). */
+#define IDI_CANTUS 1
+IDI_CANTUS ICON "cantus.ico"
 
 /* Dialog "Plugins" (Settings ▸ Plugins…) — ID numérique 105 */
 105 DIALOG 0, 0, 380, 246
@@ -40,16 +43,17 @@ BEGIN
     PUSHBUTTON "Skip this version", 3, 222, 64, 96, 16
 END
 /* Dialog "À propos" — ID numérique 107 */
-107 DIALOG 0, 0, 330, 140
+107 DIALOG 0, 0, 330, 156
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "", 1006, 14, 14, 302, 16
-    LTEXT "", 1007, 14, 34, 302, 16
-    LTEXT "https://github.com/LostInTheBugs/MusicPlayer", 1008, 14, 56, 302, 16
-    DEFPUSHBUTTON "OK", 1, 100, 108, 60, 16
-    PUSHBUTTON "Open GitHub", 2, 170, 108, 96, 16
+    CONTROL "", 1009, "Static", SS_ICON | SS_CENTERIMAGE, 146, 10, 38, 24
+    LTEXT "", 1006, 14, 42, 302, 16
+    LTEXT "", 1007, 14, 60, 302, 16
+    LTEXT "https://github.com/LostInTheBugs/Cantus", 1008, 14, 82, 302, 16
+    DEFPUSHBUTTON "OK", 1, 100, 124, 60, 16
+    PUSHBUTTON "Open GitHub", 2, 170, 124, 96, 16
 END
 
 /* Dialog "Interface" (Settings ▸ Interface…) — ID numérique 108 */

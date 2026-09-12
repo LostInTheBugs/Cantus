@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "Fireworks" (feu d'artifice)
+ * Plugin Cantus — "Fireworks" (feu d'artifice)
  * ==================================================
  * Type : visuel. Les explosions sont déclenchées par la musique :
  * chaque pic d'énergie (beat) lance une fusée qui explose en particules

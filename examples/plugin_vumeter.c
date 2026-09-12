@@ -1,5 +1,5 @@
 /*
- * Plugin MusicPlayer — "VUMeter" (style Winamp/XMMS)
+ * Plugin Cantus — "VUMeter" (style Winamp/XMMS)
  * ===================================================
  * Type : visuel. Deux colonnes de LED stéréo (24 LED par canal, échelle
  * -45..0 dB) avec pics qui retombent lentement et indicateur de clipping.

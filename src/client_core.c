@@ -1,6 +1,6 @@
-/* src/client_core.c — pont client → moteur (musicplayer-core.exe).
+/* src/client_core.c — pont client → moteur (cantus-core.exe).
  *
- * Le client (MusicPlayer.exe) :
+ * Le client (Cantus.exe) :
  *   - lance le moteur au démarrage (cc_start) s'il ne tourne pas ;
  *   - pilote par POST /api/cmd (JSON, anti-CSRF) ;
  *   - lit l'état par GET /api/state (polling ~4×/s) ;
@@ -40,7 +40,7 @@ static http_resp cc_http2(const char* method, const char* path,
                           const char* body)
 {
     http_resp r = { 0, NULL, 0 };
-    HINTERNET inet = InternetOpenA("MusicPlayer-Client/1.0",
+    HINTERNET inet = InternetOpenA("Cantus-Client/1.0",
                                    INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     if (!inet) return r;
     DWORD to = 3000;
@@ -93,7 +93,7 @@ void cc_push_web_config(int enabled, int port, const char* ips)
     char body[1024];
     snprintf(body, sizeof(body), "web_enabled=%d&web_port=%d&web_ips=%s",
              enabled ? 1 : 0, port, ips);
-    HINTERNET inet = InternetOpenA("MusicPlayer-Client/1.0",
+    HINTERNET inet = InternetOpenA("Cantus-Client/1.0",
                                    INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     if (!inet) return;
     DWORD to = 3000;
@@ -149,13 +149,13 @@ int cc_start(void)
             }
             return -1;
         }
-        /* lance musicplayer-core.exe à côté de l'exe */
+        /* lance cantus-core.exe à côté de l'exe */
         wchar_t exe[MAX_PATH];
         GetModuleFileNameW(NULL, exe, MAX_PATH);
         wchar_t* slash = wcsrchr(exe, L'\\');
         if (slash) *slash = 0;
         wchar_t core[MAX_PATH];
-        swprintf(core, MAX_PATH, L"%ls\\musicplayer-core.exe", exe);
+        swprintf(core, MAX_PATH, L"%ls\\cantus-core.exe", exe);
         if (GetFileAttributesW(core) != INVALID_FILE_ATTRIBUTES) {
             STARTUPINFOW si;
             PROCESS_INFORMATION pi;
@@ -333,7 +333,7 @@ void cc_plist_refresh(void)
 {
     http_resp r = cc_http2("GET", "/api/plist", NULL);
     if (!r.body || r.code != 200) {
-        { FILE* lf = _wfopen(L"logs\\musicplayer.log", L"a");
+        { FILE* lf = _wfopen(L"logs\\cantus.log", L"a");
           if (lf) { fprintf(lf, "PLIST: http %d\n", r.code); fclose(lf); } }
         free(r.body); return;
     }
@@ -366,7 +366,7 @@ void cc_plist_refresh(void)
             } else p++;
         }
         /* diagnostic : nombre d'items après refresh */
-        { FILE* lf = _wfopen(L"logs\\musicplayer.log", L"a");
+        { FILE* lf = _wfopen(L"logs\\cantus.log", L"a");
           if (lf) { fprintf(lf, "PLIST: %d items\n", g_plist_n); fclose(lf); } }
     }
     /* titres d'épisodes : le tableau "titles" suit le même ordre */

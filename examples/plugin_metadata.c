@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — plugin : métadonnées des fichiers audio.
+ * Cantus — plugin : métadonnées des fichiers audio.
  *
  * Type SERVICE : lit les balises ID3 (titre) des MP3 — ID3v2 (frames
  * TIT2) puis ID3v1 (les 128 derniers octets). L'interface affiche le

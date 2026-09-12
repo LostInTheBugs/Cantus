@@ -1,5 +1,5 @@
 /*
- * MusicPlayer — skin Winamp.
+ * Cantus — skin Winamp.
  * Vert acide sur gris foncé, style Winamp.
  */
 #include <windows.h>

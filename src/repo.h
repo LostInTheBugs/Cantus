@@ -17,10 +17,10 @@
  */
 
 #define REPO_DEFAULT_BASE \
-    L"https://raw.githubusercontent.com/LostInTheBugs/MusicPlayer/master/repo"
+    L"https://raw.githubusercontent.com/LostInTheBugs/Cantus/master/repo"
 
 #define REPO_PRE_BASE \
-    L"https://raw.githubusercontent.com/LostInTheBugs/MusicPlayer/pre-release/repo"
+    L"https://raw.githubusercontent.com/LostInTheBugs/Cantus/pre-release/repo"
 
 /* Base du repository par défaut selon le canal de mise à jour :
  *   - canal pre-release → branche pre-release (plugins de test)
@@ -33,7 +33,7 @@ int repo_is_pre_channel(void);
 #define REPO_MAX_PLUGINS 128
 #define REPO_MAX_URLS 16
 
-/* Liste des repositories (persistée dans %APPDATA%\MusicPlayer\repos.txt,
+/* Liste des repositories (persistée dans %APPDATA%\Cantus\repos.txt,
  * une URL par ligne). Le repository du projet est ajouté par défaut
  * quand la liste est vide. */
 int  repo_list_load(wchar_t urls[][512], int max);
