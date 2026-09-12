@@ -135,6 +135,7 @@ build/core_cd.o: src/cd.c Makefile
 # Dépendances vendor (miniaudio + FFmpeg LGPL) — utilisé par la CI
 # ----------------------------------------------------------------------
 setup: dirs
+	@mkdir -p vendor
 	@test -f vendor/miniaudio.h || (echo "==> miniaudio 0.11.25"; \
 	 curl -L -o vendor/miniaudio.h https://raw.githubusercontent.com/mackron/miniaudio/0.11.25/miniaudio.h)
 	@test -d vendor/ffmpeg/bin || (echo "==> FFmpeg n8.1 win64-lgpl-shared (BtbN)"; \
